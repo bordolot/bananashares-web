@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { ethers, Eip1193Provider, BrowserProvider, JsonRpcProvider } from 'ethers';
+import { ethers } from 'ethers';
 import { Alerts_WalletInterface } from './Alerts/Alerts';
 import { AssetFactoryInterface } from './AssetFactoryInterface';
 import { AssetInterface } from './AssetInterface';
@@ -8,11 +8,11 @@ import { AssetInterface } from './AssetInterface';
 const NETWORK_ID = '31337'; // in hex 0x7A69;
 // const NETWORK_ID = '31337'; - anvil
 
-declare global {
-    interface Window {
-        ethereum: Eip1193Provider & BrowserProvider & JsonRpcProvider;
-    }
-}
+// declare global {
+//     interface Window {
+//         ethereum: Eip1193Provider & BrowserProvider & JsonRpcProvider;
+//     }
+// }
 
 interface WalletContextType {
     // walletDetected: boolean;
@@ -182,13 +182,11 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const checkWalletPresence = async (): Promise<{ isWallet: boolean, newProvider: ethers.BrowserProvider | null }> => {
         try {
             if (typeof window.ethereum === 'undefined') {
-                console.error("MetaMask is not installed.");
                 return { isWallet: false, newProvider: null };
             }
 
             const _provider = new ethers.BrowserProvider(window.ethereum);
             return { isWallet: true, newProvider: _provider };
-
         } catch (error) {
             console.error("Error in checkWalletPresence: ", error);
             return { isWallet: false, newProvider: null }; // Error case

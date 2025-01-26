@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useWallet } from "../../blockchain/WalletInterface";
+import { ERROR_NO_METAMASK } from "../../utility/errors";
+import { ALLERT_INFO_WALLET_WATINNG, ALLERT_ON_ERROR_NO_METAMASK, ALLERT_ON_ERROR_UNEXPECTED } from "../../utility/allerts";
 
 export function ConnectButton() {
     const [isConnecting, setIsConnecting] = useState(false);
@@ -7,15 +9,22 @@ export function ConnectButton() {
 
     const onConnectButton = async () => {
         if (isConnecting) {
-            alert("Your wallet is waiting for action.");
+            alert(ALLERT_INFO_WALLET_WATINNG);
             return;
         }
-
         setIsConnecting(true);
         try {
+            if (typeof window.ethereum === 'undefined') {
+                throw new ERROR_NO_METAMASK;
+            }
             await connectWallet(); // Call the connectWallet function from WalletProvider
-        } catch (error) {
-            console.error("Error connecting wallet:", error);
+        } catch (error: any) {
+            if (error instanceof ERROR_NO_METAMASK) {
+                alert(ALLERT_ON_ERROR_NO_METAMASK);
+            } else {
+                alert(ALLERT_ON_ERROR_UNEXPECTED);
+                console.error("Error connecting wallet:", error);
+            }
         } finally {
             setIsConnecting(false);
         }

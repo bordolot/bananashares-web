@@ -9,6 +9,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    include: ['test/*.{test,spec}.?(c|m)[jt]s?(x)'],
+    include: [
+      // 'test/*.{test,spec}.?(c|m)[jt]s?(x)',
+      'test/integration/*.{test,spec}.?(c|m)[jt]s?(x)',
+      'test/unit/**/*/*.{test,spec}.?(c|m)[jt]s?(x)',
+    ],
   },
 })

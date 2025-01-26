@@ -1,0 +1,1 @@
+export class ERROR_NO_METAMASK extends Error { }
