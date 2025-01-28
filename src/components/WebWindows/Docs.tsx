@@ -10,7 +10,7 @@ const Docs: React.FC<DocsProps> = () => {
 
     return (
         <div className="p-6 bg-gradient-to-r from-green-200 to-teal-300 rounded-lg shadow-md">
-            Docs
+            Docs section
         </div>
     );
 }

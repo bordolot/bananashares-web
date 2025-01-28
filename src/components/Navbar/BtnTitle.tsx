@@ -35,6 +35,7 @@ export const TitleButton: React.FC<TitleButtonProps> = ({ onNavbarClick, whichSi
 
     return (
         <div
+            data-testid="TitleButton"
             className="relative"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -58,6 +59,7 @@ export const TitleButton: React.FC<TitleButtonProps> = ({ onNavbarClick, whichSi
             {/* Dropdown menu */}
             {isDropdownOpen && (
                 <div
+                    data-testid="TitleButton_Dropdown"
                     className="absolute top-full mt-2 w-48 bg-white border bg-opacity-100 border-gray-200 rounded-lg shadow-lg"
                     style={{ marginTop: "-1px" }} // Add spacing for buffer
                 >

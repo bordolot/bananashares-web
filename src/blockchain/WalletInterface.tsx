@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { Alerts_WalletInterface } from './Alerts/Alerts';
 import { AssetFactoryInterface } from './AssetFactoryInterface';
 import { AssetInterface } from './AssetInterface';
+import { ALLERT_ON_ERROR_UNEXPECTED } from '../utility/allerts';
 
 
 const NETWORK_ID = '31337'; // in hex 0x7A69;
@@ -99,19 +100,11 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (newProvider !== null && userAddress !== null) {
                 assetFactoryInterface.current = new AssetFactoryInterface(newProvider, userAddress, reload);
             }
-
-
-            // setCreateAssetInterfaceWithRef(assetFactoryInterface);
-
         };
         initializeWalletConnection();
-
-
-
         return () => {
-            // console.log("Component unmounted");() => new AssetFactoryInterface(results.newProvider)
-            // window.ethereum.removeAllListeners();
         };
+
 
     }, []);
 
@@ -144,7 +137,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setUserAddress(selectedAddress);
             if (provider !== null) {
                 assetFactoryInterface.current = new AssetFactoryInterface(provider, selectedAddress, reload);
-                // setCreateAssetInterfaceWithRef(new AssetFactoryInterface(provider, selectedAddress, reload));
             }
             listenToWalletEvents();
         } catch (error: any) {
@@ -153,7 +145,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             } else if (error.code === 4001) {
                 console.warn('User rejected the connection request.');
             } else {
-                alert('Unexpected error: ' + + "You probably don't have any wallet installed.");
+                alert(ALLERT_ON_ERROR_UNEXPECTED);
+                console.error('Unexpected error in connectWallet: ', error);
             }
         }
     };
@@ -188,7 +181,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const _provider = new ethers.BrowserProvider(window.ethereum);
             return { isWallet: true, newProvider: _provider };
         } catch (error) {
-            console.error("Error in checkWalletPresence: ", error);
+            console.error('Unexpected error in checkWalletPresence: ', error);
             return { isWallet: false, newProvider: null }; // Error case
         }
     };
@@ -204,7 +197,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
             return { isWalletConnected: false, userAddress: null };
         } catch (error) {
-            console.error("Error in checkWalletConnection: ", error);
+            console.error('Unexpected error in checkWalletConnection: ', error);
             return { isWalletConnected: false, userAddress: null }; // Error case
         }
     };
@@ -222,7 +215,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
             return { isNetworkSet: false };
         } catch (error: any) {
-            console.error('Unexpected error during chain switch:', error);
+            console.error('Unexpected error in checkNetwork: ', error);
             return { isNetworkSet: false };
         }
     }
@@ -256,7 +249,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             } else if (error.code === 4902) {
                 console.error('The requested chain is not supported by the wallet.');
             } else {
-                console.error('Unexpected error during chain switch:', error);
+                console.error('Unexpected error in changeNetwork: ', error);
             }
             // throw error;
             return { isNetworkSet: false };

@@ -1,29 +1,52 @@
 @import "tailwindcss";
+/* @import "tailwindcss/preflight"; */
 
-@tailwind base;
-@tailwind components;
+/* @tailwind base; */
+/* @tailwind components; */
 @tailwind utilities;
 
 
-
-@layer base {
-    h1 {
-      @apply text-2xl;
+@layer components {
+    .btnSendtransaction {
+      @apply w-full py-2 px-6 bg-[#00df9a] rounded-xl text-black hover:bg-[#9ab5df] duration-500;
     }
-    h2 {
-      @apply text-xl;
+    .btnInteract {
+        @apply font-bold cursor-pointer py-1 px-3 rounded bg-[#1c2972] hover:bg-[#1c213a] text-yellow-400;
+    }
+    .btnInteractRed {
+        @apply font-bold cursor-pointer py-1 px-3 rounded bg-red-500 hover:bg-red-700 text-white;
+    }
+    .btnInteractBlocked {
+        @apply font-bold py-1 px-3 rounded bg-gray-400 cursor-not-allowed;
+    }
+
+
+    .textStandard {
+        @apply my-4 text-xl;
     }
   }
 
-@layer components {
-    /*  */
+@layer base {
+    h1 {
+        @apply text-2xl;
+    }
+
+    h2 {
+        @apply text-xl;
+    }
+}
+
+/* @layer components {
+
+
     .btn {
-        @apply font-bold py-2 px-4 rounded;     
+        @apply font-bold py-2 px-4 rounded;
     }
 
     .btn-blue {
         @apply bg-blue-500 text-white;
     }
+
     .btn-blue:hover {
         @apply bg-blue-700;
     }
@@ -31,6 +54,7 @@
     .btn-gray {
         @apply bg-gray-400 text-gray-800;
     }
+
     .btn-gray:hover {
         @apply bg-gray-500;
     }
@@ -38,7 +62,8 @@
     .myfooter {
         @apply bg-[#0082d8] p-4 relative z-10 w-full;
     }
+
     .myfooter:hover {
         @apply bg-[#41f329] p-4 relative z-10 w-full;
     }
-}
+} */

@@ -23,7 +23,7 @@ export function ConnectButton() {
                 alert(ALLERT_ON_ERROR_NO_METAMASK);
             } else {
                 alert(ALLERT_ON_ERROR_UNEXPECTED);
-                console.error("Error connecting wallet:", error);
+                console.error('Unexpected error in onConnectButton: ', error);
             }
         } finally {
             setIsConnecting(false);
@@ -47,7 +47,7 @@ export function ConnectButton() {
     return (
         <div className="mx-auto my-auto">
             <button
-                className="w-full py-2 px-6 bg-[#00df9a] rounded-xl text-black hover:bg-[#9ab5df] duration-500"
+                className="btnSendtransaction"
                 onClick={onConnectButton}
             // disabled={isConnecting || connected}
             >

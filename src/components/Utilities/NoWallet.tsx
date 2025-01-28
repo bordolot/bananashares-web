@@ -5,8 +5,9 @@ function NoWalletDetected() {
         <div className="container">
             <div className="row justify-content-md-center">
                 <div className="col-6 p-4 text-center">
+                    <div>No Ethereum wallet was detected.</div>
                     <p>
-                        No Ethereum wallet was detected. <br />
+                        <br />
                         Please install{" "}
                         <a
                             href="https://www.coinbase.com/wallet"

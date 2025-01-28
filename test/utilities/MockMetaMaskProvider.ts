@@ -21,12 +21,14 @@ export class MockMetaMaskProvider {
     // connectedWebsites?: string[]; 
     connected: boolean = false;
     private eventListeners: Record<string, ((...args: any[]) => void)[]> = {};
-
+    private currentNetwork: string;
+    private validChainIdHex = `0x${parseInt('31337').toString(16)}`;
 
 
     constructor(rpcUrl: string, privateKey: string) {
         this.provider = new ethers.JsonRpcProvider(rpcUrl); // Anvil RPC
         this.wallet = new ethers.Wallet(privateKey, this.provider); // Create a wallet
+        this.currentNetwork = this.validChainIdHex;
     }
 
     // Simulate MetaMask's injected window.ethereum
@@ -48,10 +50,22 @@ export class MockMetaMaskProvider {
                 }
 
                 if (method === "eth_accounts") {
+
                     if (this.connected) {
                         return [this.wallet.address];
                     }
                     return [];
+                }
+                //@TODO write method to change network
+                if (method === "eth_chainId") {
+                    return this.currentNetwork;
+                }
+
+                //@TODO mock (method === wallet_switchEthereumChain)
+
+                // Mock eth_newFilter
+                if (method === "eth_newFilter") {
+                    return "0x1";
                 }
 
                 // Forward other requests to the Anvil provider
@@ -94,15 +108,9 @@ export class MockMetaMaskProvider {
         }
     }
 
-    // // Initial array
-    // vaar: string[] = ["a", "b", "c"];
-    // // Function to remove a value from the array
-    // private removeFromVaar(value: string): void {
-    // const index = this.vaar.indexOf(value); // Find the index of the value
-    // if (index !== -1) {
-    //     this.vaar.splice(index, 1); // Remove the element at the found index
-    // }
-    // }
-
+    disconnect() {
+        this.connected = false
+        this.removeAllListeners();
+    }
 
 }

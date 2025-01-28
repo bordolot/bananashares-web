@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { useWallet } from "../../../blockchain/WalletInterface";
 import FileHasher from "../../Utilities/FileHasher";
 import { TxArgs_CreatAsset } from "../../../utility/Interfaces";
+import InfoRevealer from "../../../components_generic/InfoRevealer";
 
 
 interface Share {
@@ -38,10 +39,13 @@ export function TokenizeAsset() {
         const addresses: string[] = getShareObjects(keys.address);
         const givenShares: number[] = getShareObjects(keys.share);
 
+
         if (unusedShares != 0) {
             alert("You need to alocate exactly 1000000 shares.");
             return;
         }
+
+
 
         //@TODO addresses cannot have duplicates
 
@@ -144,7 +148,7 @@ export function TokenizeAsset() {
 
     const calculateUnusedShares = (shares: Share[], maxShares: number): number => {
         return shares.reduce((remainingShares, share) => {
-            const key = `${keys.share}-${share.id}`;
+            const key = `${keys.share}`;
             const value = share[key as keyof Share];
             if (typeof value === "number") {
                 return remainingShares - value;
@@ -162,7 +166,7 @@ export function TokenizeAsset() {
 
         // Ensure `shares` is typed correctly
         for (let i = 0; i < shares.length; i++) {
-            const key = `${input}-${i + 1}`;
+            const key = `${input}`;
 
             // Dynamically access the key with proper typing
             const shareObject = shares[i] as Record<string, any>; // Assuming shares[i] is a generic object
@@ -192,7 +196,6 @@ export function TokenizeAsset() {
         }
     }
 
-
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
             <div className="container mx-auto">
@@ -204,7 +207,7 @@ export function TokenizeAsset() {
                         :
                         <></>
                 }
-                <h4 className="my-1 text-3xl">Tokenize your asset: {assetFactoryInterface.current !== null ? assetFactoryInterface.current.shouldShowAssetCreatedModal : <></>}</h4>
+                <h4 className="my-1 text-3xl">Tokenize your asset:</h4>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group my-5">
                         <div className="block mb-2 text-lg font-semibold">Asset title:</div>
@@ -222,29 +225,26 @@ export function TokenizeAsset() {
                             <div className="flex flex-col space-y-4">
                                 {shares.map((share, index) => (
                                     <div key={share.id} className="flex flex-col space-y-2">
-                                        <div className="flex space-x-4">
-                                            <input
-                                                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                type="text"
-                                                name={`${keys.name}-${share.id}`}
-                                                placeholder="First and last name"
-                                                onChange={handleSharesChange(index)}
-                                                required
-                                            />
-                                            {/* <input
-                                                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                type="text"
-                                                name={`${keys.role}-${share.id}`}
-                                                placeholder="Role in the band"
-                                                onChange={handleSharesChange(index)}
-                                                required
-                                            /> */}
+                                        <div className="flex">
+                                            <div className="flex items-center mr-2">{share.id}.</div>
+                                            <div className="flex space-x-4">
+                                                <input
+                                                    className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    type="text"
+                                                    name={`${keys.name}`}
+                                                    placeholder="First and last name"
+                                                    onChange={handleSharesChange(index)}
+                                                    required
+                                                />
+                                            </div>
+
                                         </div>
+
                                         <div className="flex space-x-4">
                                             <input
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline min-w-30"
                                                 type="text"
-                                                name={`${keys.address}-${share.id}`}
+                                                name={`${keys.address}`}
                                                 placeholder="wallet address - 0x0000000000000000000000000000000000000000"
                                                 onChange={handleSharesChange(index)}
                                                 required
@@ -252,71 +252,83 @@ export function TokenizeAsset() {
                                             <input
                                                 className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                                 type="number"
-                                                name={`${keys.share}-${share.id}`}
+                                                min={0}
+                                                max={MAX_SHARES}
+                                                name={`${keys.share}`}
                                                 placeholder="Number of shares"
+                                                defaultValue={0}
                                                 onChange={handleSharesChange(index)}
                                                 required
                                             />
+                                            <div className="flex items-center">{(
+                                                shares[index].share / MAX_SHARES * 100).toFixed(2)}%
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <div className="mb-6">
+
+
+                        <div >
                             <span className="text-lg">Shares to be allocated: {unusedShares}</span>
                         </div>
 
-
-
-
-
-
-
+                        {/* getShareObjects(keys.share)[index] */}
 
 
                         <div className="flex space-x-2 my-2">
                             <button
                                 className={
-                                    `font-bold cursor-pointer py-1 px-3 rounded ${(shares.length >= 10 || unusedShares <= 0)
-                                        ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-[#ca873a] hover:bg-[#ca6f3a] text-white'}`}
+                                    `${(shares.length >= 10 || unusedShares <= 0)
+                                        ? 'btnInteractBlocked'
+                                        : 'btnInteract'}`}
                                 type="button"
                                 onClick={addNewShareholderForm}
                                 disabled={(shares.length >= 10 || unusedShares <= 0)}>
-                                Add shareholder
+                                New Shareholder
                             </button>
                             <button
                                 className={
-                                    `font-bold cursor-pointer py-1 px-3 rounded ${shares.length <= 1
-                                        ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-red-500 hover:bg-red-700 text-white'}`}
+                                    `${shares.length <= 1
+                                        ? 'btnInteractBlocked'
+                                        : 'btnInteractRed'}`}
                                 type="button"
                                 onClick={removeLastShareholderForm}
                                 disabled={shares.length <= 1}>
-                                Remove last shareholder
+                                Remove Shareholder
                             </button>
                         </div>
-                        <div></div>
+                        <div className="mb-10"></div>
 
 
-                        <h1 className="my-4 text-xl">
-                            Upload your audio:
-                        </h1>
+                        {/* <h1 className="my-4 text-xl">
+                            Upload asset manifest:
+                        </h1> */}
+                        <div className="flex">
+                            <InfoRevealer
+                                explanation={`The Manifest is a foundational document that describes the asset, the owner's rights, and how the asset will be managed within this protocol. It defines the rules and conditions under which the asset is governed and outlines the responsibilities and entitlements of the owner(s). Think of it as a digital contract that ensures transparency and clarity. \n\n Please provide this file in the most simple format such as .txt or similar.`}
+                            />
+                            <div className="textStandard">Upload asset manifest:</div>
+                        </div>
+
                         <div></div>
                         <FileHasher
                             keccak256String={keccak256String}
                             setKeccak256String={setKeccak256String}
                             needToSave={true} />
                         <div></div>
-
+                        <div className="mb-15"></div>
 
                         <div className="form-group my-5">
                             <input
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="btnSendtransaction"
                                 type="submit"
                                 value="Tokenize"
                             />
                         </div>
+
+
                     </div>
                 </form>
 

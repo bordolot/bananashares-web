@@ -9,6 +9,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./test/setupTests.ts'],
     include: [
       // 'test/*.{test,spec}.?(c|m)[jt]s?(x)',
       'test/integration/*.{test,spec}.?(c|m)[jt]s?(x)',

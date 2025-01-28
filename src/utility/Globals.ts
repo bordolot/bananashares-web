@@ -9,3 +9,4 @@ export const GAS_LIMIT_IN_CREATE_ASSET = 10_000_000;
 
 //WebWindows
 export const SPINNER_DURATION = 500
+

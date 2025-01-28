@@ -4,7 +4,7 @@ interface GettingStartedProps { }
 
 const GettingStarted: React.FC<GettingStartedProps> = () => (
     <div className="p-6 bg-gradient-to-r from-green-200 to-teal-300 rounded-lg shadow-md">
-        GettingStarted
+        Getting started section
     </div>
 );
 
