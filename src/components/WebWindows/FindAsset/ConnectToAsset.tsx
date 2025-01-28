@@ -1,5 +1,6 @@
 import { FormEvent } from "react";
 import { useWallet } from "../../../blockchain/WalletInterface";
+import { ALLERT_ON_ERROR_UNEXPECTED } from "../../../utility/allerts";
 
 interface ConnectToAssetProps {
     moveToAsset: () => void;
@@ -7,33 +8,35 @@ interface ConnectToAssetProps {
 
 const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
     const { createAssetInterface, assetFactoryInterface, assetInterface, userAddress } = useWallet();
-    const tryToConnectToAsset = async (event: FormEvent<HTMLFormElement>) => {
+    const tryToConnectToAsset = async (_input: string, _addrORhash: number) => {
         try {
-            event.preventDefault();
-
-            const _formData = new FormData(event.currentTarget);
-            const _potentialAssetAddress = _formData.get("PotentialAssetAddress") as string;
-            const _isSmartContractAddress = /^0x[0-9a-fA-F]{40}$/.test(_potentialAssetAddress);
-
-            if (!_isSmartContractAddress) {
-                throw Error("Wrong address format. Please enter a proper 20 bytes address.");
-            }
-
             if (!assetFactoryInterface.current) {
-                throw Error("There was a problem with AssetFactory contract connection.");
+                alert("There was a problem with AssetFactory contract connection."); return;
+            }
+            // _addrORhash == 1 => by address
+            // _addrORhash == 2 => by hash
+            let _contractAddress;
+            let _result;
+            if (_addrORhash === 1) {
+                _result = await assetFactoryInterface.current.checkAssetExist(_input);
+                _contractAddress = _input;
+            } else if (_addrORhash === 2) {
+                _result = await assetFactoryInterface.current.checkAssetExistByHash(_input);
+                _contractAddress = _result.contractAddress;
+            } else {
+                alert("Wrong input."); return;
             }
 
-            const _result = await assetFactoryInterface.current.checkAssetExist(_potentialAssetAddress);
             if (!_result.assetExist) {
-                throw Error("Asset contract doesn't exist.")
+                alert("Asset contract doesn't exist."); return;
             }
 
-            const _isInterfaceCreated = createAssetInterface(_potentialAssetAddress);
+            const _isInterfaceCreated = createAssetInterface(_contractAddress);
             if (!_isInterfaceCreated) {
-                throw Error("There was a problem connecting Asset contract.");
+                alert("There was a problem connecting Asset contract."); return;
             }
             if (!assetInterface.current) {
-                throw Error("There was a problem with Asset contract interface.");
+                alert("There was a problem with Asset contract interface."); return;
             }
 
             const _infoTaken_1 = await assetInterface.current.getAssetInfo();
@@ -44,24 +47,56 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
 
 
             if (!_infoTaken_1 && !_infoTaken_2 && !_infoTaken_3 && !_infoTaken_4 && !_infoTaken_5) {
-                throw Error("There was a problem gathering Asset info.");
+                alert("There was a problem gathering Asset info."); return;
             }
             moveToAsset();
             return;
 
         } catch (error: any) {
-            alert(error)
+            alert(ALLERT_ON_ERROR_UNEXPECTED)
+            console.error(error)
         }
     };
 
+    const tryToConnectToAssetByAddress = async (event: FormEvent<HTMLFormElement>) => {
+        try {
+            event.preventDefault();
+            const _formData = new FormData(event.currentTarget);
+            const _potentialAssetAddress = _formData.get("PotentialAssetAddress") as string;
+            const _isSmartContractAddress = /^0x[0-9a-fA-F]{40}$/.test(_potentialAssetAddress);
+            if (!_isSmartContractAddress) {
+                alert("Wrong address format. Please enter a proper 20 bytes address."); return;
+            }
+            await tryToConnectToAsset(_potentialAssetAddress, 1);
+        } catch (error: any) {
+            alert(ALLERT_ON_ERROR_UNEXPECTED)
+            console.error(error)
+        }
+    }
+
+    const tryToConnectToAssetByHash = async (event: FormEvent<HTMLFormElement>) => {
+        try {
+            event.preventDefault();
+            const _formData = new FormData(event.currentTarget);
+            const _potentialAssetHash = _formData.get("PotentialAssetHash") as string;
+            const _isSmartContractHash = /^0x[0-9a-fA-F]{64}$/.test(_potentialAssetHash);
+            if (!_isSmartContractHash) {
+                alert("Wrong hash format. Please enter a proper 32 bytes hash."); return;
+            }
+            await tryToConnectToAsset(_potentialAssetHash, 2);
+        } catch (error: any) {
+            alert(ALLERT_ON_ERROR_UNEXPECTED)
+            console.error(error)
+        }
+    }
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 min-h-screen">
             <div className="container mx-auto">
-                <h4 className="text-3xl font-bold mb-6">Connect to your asset</h4>
-                <form onSubmit={tryToConnectToAsset}>
+                <div className="textHeader">Connect to your asset</div>
+                <form onSubmit={tryToConnectToAssetByAddress}>
                     <div className="mb-6">
-                        <div className="block mb-2 text-lg font-semibold">Asset address:</div>
+                        <div className="textStandard">By asset address:</div>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="text"
@@ -72,12 +107,36 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
                     </div>
                     <div className="mb-6">
                         <input
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className="btnInteract"
                             type="submit"
                             value="Try to connect"
                         />
                     </div>
                 </form>
+
+                <form onSubmit={tryToConnectToAssetByHash}>
+                    <div className="mb-6">
+                        <div className="textStandard">By asset hash:</div>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            type="text"
+                            name="PotentialAssetHash"
+                            placeholder="0x0000000000000000000000000000000000000000000000000000000000000000"
+                            required
+                        />
+                    </div>
+                    <div className="mb-6">
+                        <input
+                            className="btnInteract"
+                            type="submit"
+                            value="Try to connect"
+                        />
+                    </div>
+                </form>
+
+
+
+
             </div>
         </div>
     );

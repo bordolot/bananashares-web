@@ -1,4 +1,4 @@
-import { ButtonStandard } from "../../../components_generic/Button";
+import { ButtonStandardArrowLeft } from "../../../components_generic/Button";
 import { useWallet } from "../../../blockchain/WalletInterface";
 import { AssetInfoComponent } from "./InteractWithAsset/AssetInfoComponent";
 import { useEffect } from "react";
@@ -34,38 +34,48 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
 
     return (
         <>
-            <ButtonStandard buttonName={"Find new asset"} handleClick={back} />
+            <div className="py-4">
+                <ButtonStandardArrowLeft buttonName={"Find new asset"} handleClick={back} />
+            </div>
+
             {/* InteractWithAsset */}
+            <div className="p-6 min-h-screen">
+                {/* Asset info */}
 
-            {/* Asset info */}
-            <AssetInfoComponent />
+                <AssetInfoComponent />
 
-            {/* Licenses */}
-            <div className="my-4"></div>
-            <Licenses />
+                {/* Licenses */}
+                <div className="mb-4"></div>
+                <Licenses />
 
-            {/* User info */}
-            <div className="my-4"></div>
-            {checkIfUserIsPrivileged(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)
-                ?
-                <>
-                    {/* Privileged User */}
-                    <h4 className="my-1 text-3xl">You have aditional options:</h4>
-                    <OptionsForPrivilegedUser />
-                </>
-                :
-                <>
-                    {/* Normal User */}
+                {/* User info */}
+                <div className="mb-10"></div>
+                {checkIfUserIsPrivileged(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)
+                    ?
                     <>
-                        <OptionsForUser />
+                        {/* Privileged User */}
+                        <div className="textHeader">You have aditional options:</div>
+                        <OptionsForPrivilegedUser />
                     </>
-                </>
-            }
+                    :
+                    <>
+                        {/* Normal User */}
+                        <>
+                            <OptionsForUser />
+                        </>
+                    </>
+                }
 
-            {/* Offers */}
-            <div className="my-4"></div>
-            <h4 className="my-1 text-3xl">All offers:</h4>
-            <Offers />
+                {/* Offers */}
+                <div className="my-10"></div>
+                <div className="textHeader">All offers:</div>
+                <Offers />
+
+
+
+
+            </div>
+
         </>
     )
 }

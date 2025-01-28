@@ -165,13 +165,13 @@ export const Licenses: React.FC = () => {
 
 
 
-            <h4 className="my-1 text-3xl">Asset licenses:</h4>
+            <h4 className="textHeader">Licenses:</h4>
             {(assetInterface.current.info_allLicenses && assetInterface.current.info_allLicenses[0].length > 0)
                 ?
                 <>
                     {assetInterface.current.info_allLicenses[0].length > 0 &&
                         <>
-                            <>Here you have active licenses:</>
+                            <div className="textStandard">Here you have active licenses:</div>
                             <Dropdown<Info_License>
                                 options={assetInterface.current.info_allLicenses[0]}
                                 onSelect={handleSelect}
@@ -234,7 +234,7 @@ export const Licenses: React.FC = () => {
                 </>
 
                 :
-                <>There are no active licenses.</>}
+                <div className="textStandard">There are no active licenses.</div>}
 
             {checkIfUserIsPrivileged(userAddress, assetInterface.current.info_asset) && assetInterface.current.info_allLicenses &&
                 <>

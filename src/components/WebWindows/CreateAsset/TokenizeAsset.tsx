@@ -207,10 +207,10 @@ export function TokenizeAsset() {
                         :
                         <></>
                 }
-                <h4 className="my-1 text-3xl">Tokenize your asset:</h4>
+                <h4 className="textHeader">Tokenize your asset</h4>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group my-5">
-                        <div className="block mb-2 text-lg font-semibold">Asset title:</div>
+                        <div className="textStandardBold">Asset title:</div>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="text"
@@ -219,9 +219,9 @@ export function TokenizeAsset() {
                             required
                         />
 
-
+                        <div className="mb-5"></div>
                         <div className="mb-6">
-                            <h1 className="text-xl font-semibold mb-2">Privileged shareholders:</h1>
+                            <h1 className="textStandardBold">Privileged shareholders:</h1>
                             <div className="flex flex-col space-y-4">
                                 {shares.map((share, index) => (
                                     <div key={share.id} className="flex flex-col space-y-2">
@@ -305,14 +305,14 @@ export function TokenizeAsset() {
                         {/* <h1 className="my-4 text-xl">
                             Upload asset manifest:
                         </h1> */}
-                        <div className="flex">
+                        <div className="flex mb-1">
                             <InfoRevealer
                                 explanation={`The Manifest is a foundational document that describes the asset, the owner's rights, and how the asset will be managed within this protocol. It defines the rules and conditions under which the asset is governed and outlines the responsibilities and entitlements of the owner(s). Think of it as a digital contract that ensures transparency and clarity. \n\n Please provide this file in the most simple format such as .txt or similar.`}
                             />
                             <div className="textStandard">Upload asset manifest:</div>
                         </div>
 
-                        <div></div>
+
                         <FileHasher
                             keccak256String={keccak256String}
                             setKeccak256String={setKeccak256String}

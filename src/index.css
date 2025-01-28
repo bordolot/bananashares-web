@@ -6,6 +6,30 @@
 @tailwind utilities;
 
 
+@layer utilities {
+    @keyframes move-right {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+      100% {
+        transform: translateX(10px);
+      }
+    }
+  
+    .animate-move-right {
+        animation: move-right 0.6s ease-in-out infinite;
+      }
+
+      .animate-move-left {
+        animation: move-right 0.6s ease-in-out infinite reverse;
+      }
+
+  }
+
+
 @layer components {
     .btnSendtransaction {
       @apply w-full py-2 px-6 bg-[#00df9a] rounded-xl text-black hover:bg-[#9ab5df] duration-500;
@@ -21,9 +45,25 @@
     }
 
 
-    .textStandard {
+    /* .textStandard {
         @apply my-4 text-xl;
+    } */
+
+    .textStandard {
+        @apply text-lg;
     }
+    .textStandardBold {
+        @apply text-lg font-bold;
+    }
+    .textHeader {
+        @apply text-3xl font-bold mb-6;
+    }
+
+
+    .bgStandard{
+        @apply  bg-gray-100 ;
+    }
+
   }
 
 @layer base {

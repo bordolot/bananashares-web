@@ -129,6 +129,7 @@ const FileHasher: React.FC<FileHasherProps> = ({ keccak256String, setKeccak256St
                     Upload File
                 </label>
             </div>
+            <div className="mb-5"></div>
 
             {base64String && (
                 <div>
@@ -139,11 +140,12 @@ const FileHasher: React.FC<FileHasherProps> = ({ keccak256String, setKeccak256St
                         <div className='textStandard'>Read {fileName} as: {base64String.slice(0, 10)}.....</div>
 
                     </div>
+                    <div className="mb-5"></div>
 
                     {needToSave
                         &&
                         <>
-                            <div className='flex'>
+                            <div className='flex mb-1'>
                                 <InfoRevealer explanation={'Saves the encoded version of your manifest to your machine. The best practice is to keep one copy of this file in a safe place.\n\n Share both the original file and the hashed version with all interested parties. Both files can be used to confirm the asset\'s hash, but the encoded version is more reliable.\n\nCreates a hash of your manifest that will be saved on the blockchain.'} />
                                 <div className='textStandard '>Save this file to generate hash:</div>
                             </div>

@@ -6,7 +6,7 @@ import ConnectWallet from "../../Utilities/ConnectWallet";
 import NoWalletDetected from "../../Utilities/NoWallet";
 import Spinner from "../../Utilities/Spinner";
 import { SPINNER_DURATION } from "../../../utility/Globals";
-import { ButtonStandard } from "../../../components_generic/Button";
+import { ButtonStandardArrowRight } from "../../../components_generic/Button";
 import { useWallet } from "../../../blockchain/WalletInterface";
 
 
@@ -39,19 +39,21 @@ const FindAsset: React.FC = () => {
 
     if (showConnectToAsset) {
         return (
-            <>
+            <div className="bgStandard">
                 {(assetInterface.current !== null) ?
-                    <ButtonStandard buttonName="Current asset" handleClick={moveToAsset} />
+                    <div className="py-4">
+                        <ButtonStandardArrowRight buttonName="Current asset" handleClick={moveToAsset} />
+                    </div>
                     : <></>
                 }
                 <ConnectToAsset moveToAsset={moveToAsset} />
-            </>
+            </div>
         );
     }
     return (
-        <>
+        <div className="bgStandard">
             <InteractWithAsset back={back} />
-        </>
+        </div>
     );
 
 

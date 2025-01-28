@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 
 export function ConnectButton() {
     return (
@@ -58,15 +58,59 @@ interface ButtonStandardProps {
 
 export const ButtonStandard: React.FC<ButtonStandardProps> = ({ buttonName, handleClick }) => {
     return (
-        <div className="flex justify-center items-center my-2">
+        <div className="flex">
             <button
-                className="py-2 px-6 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-full hover:bg-green-700 transition duration-300 shadow-lg"
+                className="btnInteract"
                 onClick={handleClick}>
                 {buttonName}
             </button>
         </div>
     );
 };
+
+
+export const ButtonStandardArrowRight: React.FC<ButtonStandardProps> = ({ buttonName, handleClick }) => {
+    const [isHovered, setIsHovered] = useState(false); // State to track hover
+
+    return (
+        <div className="flex justify-center items-center">
+            <button
+                className="btnInteract flex items-center"
+                onClick={handleClick}
+                onMouseEnter={() => setIsHovered(true)} // Set isHovered to true on hover
+                onMouseLeave={() => setIsHovered(false)} // Reset isHovered on mouse leave
+            >
+                {buttonName}
+                <FaChevronRight
+                    className={`text-yellow-400 text-sm transition-transform duration-300 ${isHovered ? "animate-move-right" : ""}`}
+                />
+            </button>
+        </div>
+    );
+};
+
+export const ButtonStandardArrowLeft: React.FC<ButtonStandardProps> = ({ buttonName, handleClick }) => {
+    const [isHovered, setIsHovered] = useState(false); // State to track hover
+
+    return (
+        <div className="flex justify-center items-center">
+            <button
+                className="btnInteract flex items-center"
+                onClick={handleClick}
+                onMouseEnter={() => setIsHovered(true)} // Set isHovered to true on hover
+                onMouseLeave={() => setIsHovered(false)} // Reset isHovered on mouse leave
+            >
+                {buttonName}
+                <FaChevronLeft
+                    className={`text-yellow-400 text-sm transition-transform duration-300 ${isHovered ? "animate-move-left" : ""}`}
+                />
+            </button>
+        </div>
+    );
+};
+
+
+
 
 // export const TitleButton: React.FC<ButtonStandardProps> = ({ handleClick }) => {
 //     return (

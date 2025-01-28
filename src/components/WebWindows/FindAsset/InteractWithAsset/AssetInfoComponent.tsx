@@ -3,7 +3,7 @@ import { ButtonStandard } from "../../../../components_generic/Button";
 import ModalContent from "../../../Modals/Modal";
 import FileHasher from "../../../Utilities/FileHasher";
 import { useWallet } from "../../../../blockchain/WalletInterface";
-
+import { TOTAL_SUPLY } from "../../../../utility/Globals";
 
 
 
@@ -51,20 +51,50 @@ export const AssetInfoComponent: React.FC = () => {
                 </ModalContent>
             )}
 
+            <div className="textHeader">Asset</div>
+            <div className="flex">
+                <div className="textStandardBold">Title:</div>
+                <div className="mr-3"></div>
+                <div className="textStandard">{assetInterface.current.info_asset.title}</div>
+            </div>
+            <div className="flex">
+                <div className="textStandardBold">Hash:</div>
+                <div className="mr-3"></div>
+                <div className="textStandard">{assetInterface.current.info_asset.hash}</div>
+            </div>
+            {/* <div>title: {assetInterface.current.info_asset.title}</div>
+            <div>hash: {assetInterface.current.info_asset.hash}</div> */}
+            <div className="">
+                <ButtonStandard
+                    buttonName="Verify hash"
+                    handleClick={() => setShouldCheckHash(true)}
+                />
+            </div>
 
-            <h4 className="my-1 text-3xl">Song:</h4>
-            <div>title: {assetInterface.current.info_asset.title}</div>
-            <div>hash: {assetInterface.current.info_asset.hash}</div>
-            <ButtonStandard
-                buttonName="check hash"
-                handleClick={() => setShouldCheckHash(true)}
-            />
-
+            <div className="textHeader mt-10">Privileged shareholders:</div>
             {assetInterface.current.info_asset.names.map((name, index) => (
-                <div key={index}>
-                    <div>Name: {name}</div>
-                    <div>Address: {assetInterface.current?.info_asset?.addresses[index]}</div>
-                    <div>Share: {Number(assetInterface.current?.info_asset?.shares[index])}</div>
+                <div className=" mb-5" key={index}>
+                    <div className="flex">
+                        <div className="textStandardBold">Name:</div>
+                        <div className="mr-3"></div>
+                        <div className="textStandard">{name}</div>
+                    </div>
+                    <div className="flex">
+                        <div className="textStandardBold">Address:</div>
+                        <div className="mr-3"></div>
+                        <div className="textStandard">{assetInterface.current?.info_asset?.addresses[index]}</div>
+                    </div>
+                    <div className="flex">
+                        <div className="textStandardBold">Shares:</div>
+                        <div className="mr-3"></div>
+                        <div className="textStandard">
+                            {Number(assetInterface.current?.info_asset?.shares[index])}
+                            <div className="textStandard">{(Number(assetInterface.current?.info_asset?.shares[index]) / TOTAL_SUPLY * 100).toFixed(2)}%</div>
+
+                        </div>
+
+
+                    </div>
                 </div>
             ))}
         </>

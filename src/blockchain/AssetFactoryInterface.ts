@@ -41,6 +41,21 @@ export class AssetFactoryInterface extends ContractInterface {
         }
     }
 
+    async checkAssetExistByHash(_assetHash: string): Promise<{ assetExist: boolean, contractAddress: string }> {
+        if (!this.contract) return { assetExist: false, contractAddress: "0x" }
+        try {
+            const assetAddr = await this.contract.getSongByHash(_assetHash);
+            if (assetAddr != "") {
+                return { assetExist: true, contractAddress: assetAddr }
+            }
+            return { assetExist: false, contractAddress: "0x" }
+        } catch (error: any) {
+            console.warn("checkAssetExist error: ", error);
+            return { assetExist: false, contractAddress: "0x" }
+        }
+    }
+
+
     async creatAsset(args: TxArgs_CreatAsset): Promise<void> {
         await this.sendTransaction(async () => {
             if (this.signer == undefined) {
