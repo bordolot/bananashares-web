@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { ButtonStandard } from "../../../../components_generic/Button";
 import ModalContent from "../../../Modals/Modal";
-import FileHasher from "../../../Utilities/FileHasher";
+import { HashVeryfier } from "../../../Utilities/FileHasher";
 import { useWallet } from "../../../../blockchain/WalletInterface";
 import { TOTAL_SUPLY } from "../../../../utility/Globals";
+import { TitleValueInOneLine } from "../../../../components_generic/SimpleCompenents";
+import InfoRevealer from "../../../../components_generic/InfoRevealer";
+
 
 
 
 export const AssetInfoComponent: React.FC = () => {
     const { assetInterface } = useWallet();
     const [shouldShowCheckHash, setShouldCheckHash] = useState(false);
-    const [keccak256String, setKeccak256String] = useState<string | null>(null);
 
 
 
@@ -25,78 +27,83 @@ export const AssetInfoComponent: React.FC = () => {
     return (
         <>
             {shouldShowCheckHash && (
-                <ModalContent onClose={() => { setShouldCheckHash(false); setKeccak256String(null) }}>
+                <ModalContent onClose={() => { setShouldCheckHash(false); }}>
                     {/* {children} */}
                     <div>
-                        Song hash: {assetInterface.current.info_asset.hash}
+                        <TitleValueInOneLine
+                            title={<div className="textStandardBold whitespace-nowrap">Asset hash:</div>}
+                            distanse={"mr-4"}
+                            value={<div className="break-all textStandard">{assetInterface.current.info_asset.hash}</div>} />
 
-                        <h1 className="my-4 text-xl">
-                            Upload your audio:
-                        </h1>
                         <div></div>
-                        <FileHasher
-                            keccak256String={keccak256String}
-                            setKeccak256String={setKeccak256String}
-                            needToSave={false} />
+                        <div className="bgStandard2 p-2 rounded-lg">
+                            <div className="textStandard">Upload original(decoded) manifest:</div>
+                            <HashVeryfier
+                                trueKeccak256String={assetInterface.current.info_asset.hash}
+                                isFileBase64={false} buttonId={"file-1"} />
+                        </div>
+
+                        <div className="mb-3"></div>
+                        <div className="bgStandard2 p-2 rounded-lg">
+                            <div className="textStandard">Upload base64 encoded manifest:</div>
+                            <HashVeryfier
+                                trueKeccak256String={assetInterface.current.info_asset.hash}
+                                isFileBase64={true} buttonId={"file-2"} />
+                        </div>
                         <div></div>
-                        {keccak256String &&
-                            <>
-                                Hashes are the same: {(keccak256String === assetInterface.current.info_asset.hash) ? <>yes</> : <>no</>}
-                            </>
-                        }
 
                     </div>
-
-
                 </ModalContent>
             )}
 
+
             <div className="textHeader">Asset</div>
+            <TitleValueInOneLine
+                title={"Title:"}
+                distanse={"mr-4"}
+                value={assetInterface.current.info_asset.title} />
+            <TitleValueInOneLine
+                title={"Hash:"}
+                distanse={"mr-3"}
+                value={assetInterface.current.info_asset.hash} />
+
             <div className="flex">
-                <div className="textStandardBold">Title:</div>
-                <div className="mr-3"></div>
-                <div className="textStandard">{assetInterface.current.info_asset.title}</div>
-            </div>
-            <div className="flex">
-                <div className="textStandardBold">Hash:</div>
-                <div className="mr-3"></div>
-                <div className="textStandard">{assetInterface.current.info_asset.hash}</div>
-            </div>
-            {/* <div>title: {assetInterface.current.info_asset.title}</div>
-            <div>hash: {assetInterface.current.info_asset.hash}</div> */}
-            <div className="">
+                <InfoRevealer explanation={"Always review the decoded manifest before using the contract."} />
+                <div className="mr-1"></div>
                 <ButtonStandard
                     buttonName="Verify hash"
                     handleClick={() => setShouldCheckHash(true)}
                 />
             </div>
 
+
             <div className="textHeader mt-10">Privileged shareholders:</div>
-            {assetInterface.current.info_asset.names.map((name, index) => (
-                <div className=" mb-5" key={index}>
-                    <div className="flex">
-                        <div className="textStandardBold">Name:</div>
-                        <div className="mr-3"></div>
-                        <div className="textStandard">{name}</div>
-                    </div>
-                    <div className="flex">
-                        <div className="textStandardBold">Address:</div>
-                        <div className="mr-3"></div>
-                        <div className="textStandard">{assetInterface.current?.info_asset?.addresses[index]}</div>
-                    </div>
-                    <div className="flex">
-                        <div className="textStandardBold">Shares:</div>
-                        <div className="mr-3"></div>
-                        <div className="textStandard">
-                            {Number(assetInterface.current?.info_asset?.shares[index])}
-                            <div className="textStandard">{(Number(assetInterface.current?.info_asset?.shares[index]) / TOTAL_SUPLY * 100).toFixed(2)}%</div>
+            <div className="flex flex-wrap gap-10">
+                {assetInterface.current.info_asset.names.map((name, index) => (
+                    <div className=" mb-5" key={index}>
+                        <TitleValueInOneLine
+                            title={"Name:"}
+                            distanse={"mr-6"}
+                            value={name} />
+                        <TitleValueInOneLine
+                            title={"Address:"}
+                            distanse={"mr-2"}
+                            value={assetInterface.current?.info_asset?.addresses[index] ?? ""} />
+                        <TitleValueInOneLine
+                            title={"Shares:"}
+                            distanse={"mr-5"}
+                            value={
+                                <>
+                                    {Number(assetInterface.current?.info_asset?.shares[index])}
+                                    <div className="textStandard">{(Number(assetInterface.current?.info_asset?.shares[index]) / TOTAL_SUPLY * 100).toFixed(2)}%</div>
+                                </>
+                            } />
 
-                        </div>
-
-
                     </div>
-                </div>
-            ))}
+                ))}
+
+            </div>
+
         </>
     )
 

@@ -91,53 +91,56 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
     }
 
     return (
-        <div className="p-6 min-h-screen">
-            <div className="container mx-auto">
-                <div className="textHeader">Connect to your asset</div>
-                <form onSubmit={tryToConnectToAssetByAddress}>
-                    <div className="mb-6">
-                        <div className="textStandard">By asset address:</div>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            name="PotentialAssetAddress"
-                            placeholder="0x0000000000000000000000000000000000000000"
-                            required
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <input
-                            className="btnInteract"
-                            type="submit"
-                            value="Try to connect"
-                        />
-                    </div>
-                </form>
+        // <div className="p-6 min-h-screen">
+        //     <div className="container mx-auto">
 
-                <form onSubmit={tryToConnectToAssetByHash}>
-                    <div className="mb-6">
-                        <div className="textStandard">By asset hash:</div>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            name="PotentialAssetHash"
-                            placeholder="0x0000000000000000000000000000000000000000000000000000000000000000"
-                            required
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <input
-                            className="btnInteract"
-                            type="submit"
-                            value="Try to connect"
-                        />
-                    </div>
-                </form>
+        <div className="m-10">
+
+            <div className="textHeader">Connect to your asset</div>
+            <form onSubmit={tryToConnectToAssetByAddress}>
+                <div className="mb-6">
+                    <div className="textStandard">By asset address:</div>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        name="PotentialAssetAddress"
+                        placeholder="0x0000000000000000000000000000000000000000"
+                        required
+                    />
+                </div>
+                <div className="mb-6">
+                    <input
+                        className="btnInteract"
+                        type="submit"
+                        value="Try to connect"
+                    />
+                </div>
+            </form>
+
+            <form onSubmit={tryToConnectToAssetByHash}>
+                <div className="mb-6">
+                    <div className="textStandard">By asset hash:</div>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        name="PotentialAssetHash"
+                        placeholder="0x0000000000000000000000000000000000000000000000000000000000000000"
+                        required
+                    />
+                </div>
+                <div className="mb-6">
+                    <input
+                        className="btnInteract"
+                        type="submit"
+                        value="Try to connect"
+                    />
+                </div>
+            </form>
 
 
 
 
-            </div>
+
         </div>
     );
 };

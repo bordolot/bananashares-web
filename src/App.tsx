@@ -42,16 +42,15 @@ function App() {
     <>
       <WalletProvider>
         <Navbar onNavbarClick={handleNavbarClick} navbarRef={navbarRef} />
-        <div className="flex flex-col min-h-screen">
-          <main className="flex-grow mt-24">
-            {activeComponent === 'Governance' && <Governance />}
-            {activeComponent === 'Create Asset' && <CreateAsset />}
-            {activeComponent === 'Find Asset' && <FindAsset />}
-            {activeComponent === 'About' && <About />}
-            {activeComponent === 'Getting started' && <GettingStarted />}
-            {activeComponent === 'Docs' && <Docs />}
-            {activeComponent === 'Help' && <Help />}
-          </main>
+        <div className="flex flex-col min-h-screen mt-24 bgStandard">
+          {/* @TODO consider utility class className="container" */}
+          {activeComponent === 'Governance' && <Governance />}
+          {activeComponent === 'Create Asset' && <CreateAsset />}
+          {activeComponent === 'Find Asset' && <FindAsset />}
+          {activeComponent === 'About' && <About />}
+          {activeComponent === 'Getting started' && <GettingStarted />}
+          {activeComponent === 'Docs' && <Docs />}
+          {activeComponent === 'Help' && <Help />}
         </div>
       </WalletProvider>
       <Footer />

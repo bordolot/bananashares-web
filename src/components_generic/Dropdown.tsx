@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 interface DropdownProps<T> {
+    propText: string;
     options: T[];
     onSelect: (option: T) => void;
     renderOption: (option: T) => React.ReactNode;
 }
 
-const Dropdown = <T,>({ options, onSelect, renderOption }: DropdownProps<T>) => {
+const Dropdown = <T,>({ propText, options, onSelect, renderOption }: DropdownProps<T>) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<T | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,7 +43,7 @@ const Dropdown = <T,>({ options, onSelect, renderOption }: DropdownProps<T>) => 
                     className="inline-flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
                     onClick={handleToggle}
                 >
-                    {selectedOption ? renderOption(selectedOption) : 'Select an option'}
+                    {selectedOption ? renderOption(selectedOption) : <>{propText}</>}
                     <svg
                         className="ml-2 h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -60,11 +61,12 @@ const Dropdown = <T,>({ options, onSelect, renderOption }: DropdownProps<T>) => 
             </div>
             {isOpen && (
                 <div className="origin-top-left absolute left-0 mt-2 min-w-full w-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <div className="py-1 " role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         {options.map((option, index) => (
                             <button
                                 key={index}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                className="block  px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+
                                 onClick={() => handleOptionClick(option)}
                             >
                                 {renderOption(option)}

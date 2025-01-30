@@ -12,19 +12,20 @@ const ModalContent = ({ children, onClose }: ModalContentProps) => {
 
     return (
         <div
-            className="fixed z-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            className="fixed z-10 inset-0 bg-black/50 flex justify-center items-center"
             onClick={handleClick}
         >
             <div
-                className="bg-white rounded-lg p-5 max-w-3xl"
+                className="bg-white rounded-lg p-5 max-w-3xl mt-24 max-h-[75vh] h-auto overflow-y-auto"
                 onClick={handleClick}
             >
                 <button
-                    className="bg-red-500 text-white px-4 py-2 rounded mb-4"
+                    className="btnInteractRed"
                     onClick={onClose}
                 >
-                    Hide Modal
+                    Hide
                 </button>
+                <div className="pb-5"></div>
                 {children}
             </div>
         </div>

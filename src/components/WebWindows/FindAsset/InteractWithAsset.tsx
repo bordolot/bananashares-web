@@ -34,19 +34,19 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
 
     return (
         <>
-            <div className="py-4">
+            <div className="my-7">
                 <ButtonStandardArrowLeft buttonName={"Find new asset"} handleClick={back} />
             </div>
 
             {/* InteractWithAsset */}
-            <div className="p-6 min-h-screen">
+            <div className="m-10">
                 {/* Asset info */}
 
                 <AssetInfoComponent />
 
                 {/* Licenses */}
                 <div className="mb-4"></div>
-                <Licenses />
+                <Licenses isUserPrivileged={checkIfUserIsPrivileged(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)} />
 
                 {/* User info */}
                 <div className="mb-10"></div>

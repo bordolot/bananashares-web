@@ -164,7 +164,7 @@ export const OptionsForPrivilegedUser: React.FC = () => {
                 {/* {children} */}
 
                 <Form
-                    submitName="submit"
+                    submitName="Send transaction"
                     handleSubmit={makeSellOffer}>
                     <ModalSellShares numberOfShares={getSharesFromSongInfo(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)} />
                 </Form>
@@ -196,7 +196,6 @@ export const OptionsForPrivilegedUser: React.FC = () => {
                     buttonName="Make Sell Offer" />
             </>
         }
-
 
         {assetInterface.current.info_user.isThereAnyDividend
             ?

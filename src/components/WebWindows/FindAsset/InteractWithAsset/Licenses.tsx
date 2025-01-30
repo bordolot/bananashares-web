@@ -1,24 +1,30 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { ButtonStandard } from "../../../../components_generic/Button";
-import { Info_License, TxArgs_ActivateLicense, TxArgs_PutNewLicense, TxArgs_SignLicense } from "../../../../utility/Interfaces";
+import { Info_License, TxArgs_PutNewLicense } from "../../../../utility/Interfaces";
 import ModalContent from "../../../Modals/Modal";
 import Form from "../../../../components_generic/Form";
 import { ModalCreateNewLicense } from "../../../Modals/ModalCreateNewLicense";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";
 import Dropdown from "../../../../components_generic/Dropdown";
-import FileHasher from "../../../Utilities/FileHasher";
+import { HashVeryfier } from "../../../Utilities/FileHasher";
 import { useWallet } from "../../../../blockchain/WalletInterface";
-import { checkIfUserIsPrivileged } from "../../../../blockchain/utilities/commonMethods";
+import { License } from "./License";
+import { TitleValueInOneLine } from "../../../../components_generic/SimpleCompenents";
 
-export const Licenses: React.FC = () => {
+interface LicensesProps {
+    isUserPrivileged: boolean;
+}
+
+export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
     const { userAddress, assetInterface, reloadKey } = useWallet();
 
     const [shouldShowCreateAgr, setShouldShowCreateAgr] = useState(false);
     const [shouldShowCheckAgr, setShouldCheckAgr] = useState(false);
-    const [keccak256StringAgr, setKeccak256StringAgr] = useState<string | null>(null);
+
     const [keccak256String, setKeccak256String] = useState<string | null>(null);
     const [activeLicense, setActiveLicense] = useState<Info_License | null>(null);
     const [activeNotActiveLicense, setNotActiveLicense] = useState<Info_License | null>(null);
+
 
     useEffect(() => {
         setActiveLicense(null);
@@ -69,73 +75,37 @@ export const Licenses: React.FC = () => {
     }
 
     const handleSelect = (option: Info_License) => {
-        if (option.isActive) {
-            setActiveLicense(option)
-        } else {
-            setNotActiveLicense(option)
-        }
+        setActiveLicense(option)
 
     };
 
-    async function deactivateLicense() {
-        try {
-            if (!assetInterface.current) {
-                throw Error("There was a problem with Asset contract interface.");
-            }
-            if (!activeLicense) {
-                throw Error("Set a proper value to deactivate the license.");
-            }
-            const _args: TxArgs_ActivateLicense = {
-                licenseHash: activeLicense.hash,
-                activate: false,
-            };
-            const result = await assetInterface.current.activateLicenseTx(_args);
-            if (!result) { throw Error("Transaction failed"); }
-        } catch (error: any) {
-            alert(error)
-        }
+    const handleDropdownSelect = (option: Info_License) => {
+        setNotActiveLicense(option);
+    };
 
-    }
 
-    async function activateLicense() {
-        try {
-            if (!assetInterface.current) {
-                throw Error("There was a problem with Asset contract interface.");
-            }
-            if (!activeNotActiveLicense) {
-                throw Error("Set a proper value to activate the license.");
-            }
-            const _args: TxArgs_ActivateLicense = {
-                licenseHash: activeNotActiveLicense.hash,
-                activate: true,
-            };
-            const result = assetInterface.current.activateLicenseTx(_args);
-            if (!result) { throw Error("Transaction failed"); }
 
-        } catch (error: any) {
-            alert(error)
-        }
-    }
+    // async function activateLicense() {
+    //     try {
+    //         if (!assetInterface.current) {
+    //             throw Error("There was a problem with Asset contract interface.");
+    //         }
+    //         if (!activeNotActiveLicense) {
+    //             throw Error("Set a proper value to activate the license.");
+    //         }
+    //         const _args: TxArgs_ActivateLicense = {
+    //             licenseHash: activeNotActiveLicense.hash,
+    //             activate: true,
+    //         };
+    //         const result = assetInterface.current.activateLicenseTx(_args);
+    //         if (!result) { throw Error("Transaction failed"); }
 
-    async function signLicense() {
-        try {
-            if (!assetInterface.current) {
-                throw Error("There was a problem with Asset contract interface.");
-            }
-            if (!activeLicense) {
-                throw Error("There is no such a license.");
-            }
-            const _args: TxArgs_SignLicense = {
-                licenseHash: activeLicense.hash,
-                etherToPay: activeLicense.value,
-            };
-            const result = await assetInterface.current.signLicenseTx(_args);
-            if (!result) { throw Error("Transaction failed"); }
+    //     } catch (error: any) {
+    //         alert(error)
+    //     }
+    // }
 
-        } catch (error: any) {
-            alert(error)
-        }
-    }
+
 
 
     if (!userAddress) {
@@ -153,7 +123,7 @@ export const Licenses: React.FC = () => {
             {shouldShowCreateAgr && (
                 <ModalContent onClose={() => { setShouldShowCreateAgr(false) }}>
                     <Form
-                        submitName="submit"
+                        submitName="Send transaction"
                         handleSubmit={putNewLicense}>
                         <ModalCreateNewLicense
                             keccak256String={keccak256String}
@@ -165,104 +135,115 @@ export const Licenses: React.FC = () => {
 
 
 
-            <h4 className="textHeader">Licenses:</h4>
-            {(assetInterface.current.info_allLicenses && assetInterface.current.info_allLicenses[0].length > 0)
+            <div className="textHeader">Licenses:</div>
+
+            {/* Create new license */}
+            {isUserPrivileged
+                && assetInterface.current.info_allLicenses &&
+                <ButtonStandard
+                    handleClick={showNewLicense}
+                    buttonName="Upload new license" />
+            }
+
+            <div className="mb-10"></div>
+
+            {/* Active Licenses */}
+            {(assetInterface.current.info_allLicenses
+                && assetInterface.current.info_allLicenses[0].length > 0)
                 ?
                 <>
-                    {assetInterface.current.info_allLicenses[0].length > 0 &&
-                        <>
-                            <div className="textStandard">Here you have active licenses:</div>
-                            <Dropdown<Info_License>
-                                options={assetInterface.current.info_allLicenses[0]}
-                                onSelect={handleSelect}
-                                renderOption={(option) => <span>{option.hash}</span>}
-                            />
-                        </>
-                    }
-
-
-                    {activeLicense &&
-                        <div>
-                            <div>Selected license: {activeLicense.hash}</div>
-                            <div>Price: {Number(activeLicense.value) / WEI_IN_ETHER} ether</div>
-                            {checkIfUserIsPrivileged(userAddress, assetInterface.current.info_asset) &&
-                                <ButtonStandard
-                                    handleClick={deactivateLicense}
-                                    buttonName="Deactivate" />}
-                            <ButtonStandard
-                                handleClick={signLicense}
-                                buttonName="Sign License" />
-
-                            <ButtonStandard
-                                buttonName="Check License"
-                                handleClick={() => setShouldCheckAgr(true)}
-                            />
-
-                            {shouldShowCheckAgr && (
-                                <ModalContent onClose={() => { setShouldCheckAgr(false); setKeccak256StringAgr(null) }}>
-                                    {/* {children} */}
-                                    <div>
-                                        Agr hash: {activeLicense.hash}
-
-                                        <h1 className="my-4 text-xl">
-                                            Upload license file:
-                                        </h1>
-                                        <div></div>
-                                        <FileHasher
-                                            keccak256String={keccak256StringAgr}
-                                            setKeccak256String={setKeccak256StringAgr}
-                                            needToSave={false} />
-                                        <div></div>
-                                        {keccak256StringAgr &&
-                                            <>
-                                                Hashes are the same: {(keccak256StringAgr === activeLicense.hash) ? <>yes</> : <>no</>}
-                                            </>
-                                        }
-
-                                    </div>
-
-
-                                </ModalContent>
-                            )}
-
-
-
-                        </div>}
-
-
-
+                    <div className="flex flex-wrap gap-10">
+                        {assetInterface.current.info_allLicenses[0].map((license, index) => (
+                            <div className=" mb-5" key={index}>
+                                <License
+                                    isUserPrivileged={isUserPrivileged}
+                                    hash={license.hash}
+                                    price={Number(license.value)}
+                                    isActive={license.isActive}
+                                    verifyLicense={() => { setShouldCheckAgr(true); handleSelect(license) }}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </>
 
                 :
                 <div className="textStandard">There are no active licenses.</div>}
 
-            {checkIfUserIsPrivileged(userAddress, assetInterface.current.info_asset) && assetInterface.current.info_allLicenses &&
+            {isUserPrivileged
+                && assetInterface.current.info_allLicenses &&
                 <>
                     {assetInterface.current.info_allLicenses[1].length > 0 &&
                         <>
-                            <div></div>
-                            <>Here you have not active licenses:</>
-                            <Dropdown<Info_License>
-                                options={assetInterface.current.info_allLicenses[1]}
-                                onSelect={handleSelect}
-                                renderOption={(option) => <span>{option.hash}</span>}
-                            />
+
+                            <div className="flex items-center ">
+                                <div className="textStandard">Deactivated licenses:</div>
+                                <div className="mr-1"></div>
+                                <Dropdown<Info_License>
+                                    propText="select license"
+                                    options={assetInterface.current.info_allLicenses[1]}
+                                    onSelect={handleDropdownSelect}
+                                    renderOption={(option) => <span>{option.hash}</span>}
+                                />
+
+
+                            </div>
+
                             {activeNotActiveLicense &&
                                 <div>
-                                    <div>Selected license: {activeNotActiveLicense.hash}</div>
+                                    <License
+                                        isUserPrivileged={isUserPrivileged}
+                                        hash={activeNotActiveLicense.hash}
+                                        price={Number(activeNotActiveLicense.value)}
+                                        isActive={activeNotActiveLicense.isActive}
+                                        verifyLicense={() => { setShouldCheckAgr(true); handleSelect(activeNotActiveLicense) }}
+                                    />
+                                    {/* <div>Selected license: {activeNotActiveLicense.hash}</div>
                                     <div>Price: {Number(activeNotActiveLicense.value) / WEI_IN_ETHER} ether</div>
-                                    {checkIfUserIsPrivileged(userAddress, assetInterface.current.info_asset) &&
+                                    {isUserPrivileged &&
                                         <ButtonStandard
                                             handleClick={activateLicense}
-                                            buttonName="Activate" />}
+                                            buttonName="Activate" />} */}
                                 </div>}
                         </>
                     }
-                    <ButtonStandard
-                        handleClick={showNewLicense}
-                        buttonName="Upload new license" />
+
                 </>
             }
+
+
+            {/* Verify license hash */}
+            {shouldShowCheckAgr && (
+                <ModalContent onClose={() => { setShouldCheckAgr(false); }}>
+                    <div>
+
+                        <TitleValueInOneLine
+                            title={<div className="textStandardBold whitespace-nowrap">License hash:</div>}
+                            distanse={"mr-4"}
+                            value={<div className="break-all textStandard">{activeLicense?.hash ?? "No license selected."}</div>} />
+
+                        <div></div>
+                        <div className="bgStandard2 p-2 rounded-lg">
+                            <div className="textStandard">Upload original(decoded) license:</div>
+                            <HashVeryfier
+                                trueKeccak256String={activeLicense?.hash ?? "0x"}
+                                isFileBase64={false} buttonId={"file-1"} typeOfService={1} />
+                        </div>
+
+                        <div className="mb-3"></div>
+
+                        <div className="bgStandard2 p-2 rounded-lg">
+                            <div className="textStandard">Upload base64 encoded license:</div>
+                            <HashVeryfier
+                                trueKeccak256String={activeLicense?.hash ?? "0x"}
+                                isFileBase64={true} buttonId={"file-2"} typeOfService={1} />
+                        </div>
+                    </div>
+
+
+                </ModalContent>
+            )}
+
 
         </>
     )

@@ -350,7 +350,9 @@ export class AssetInterface extends ContractInterface {
             }
             const tx = await this.signer.signLicense(
                 args.licenseHash,
-                args.etherToPay
+                {
+                    value: args.etherToPay.toString()
+                }
             );
             this.txBeingSent = tx.hash;
         });

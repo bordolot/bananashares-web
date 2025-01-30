@@ -39,9 +39,9 @@ const FindAsset: React.FC = () => {
 
     if (showConnectToAsset) {
         return (
-            <div className="bgStandard">
+            <div className="">
                 {(assetInterface.current !== null) ?
-                    <div className="py-4">
+                    <div className="my-7">
                         <ButtonStandardArrowRight buttonName="Current asset" handleClick={moveToAsset} />
                     </div>
                     : <></>
@@ -51,7 +51,7 @@ const FindAsset: React.FC = () => {
         );
     }
     return (
-        <div className="bgStandard">
+        <div className="">
             <InteractWithAsset back={back} />
         </div>
     );
