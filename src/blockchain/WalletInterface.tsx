@@ -130,13 +130,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     return;
                 }
             }
-            const [selectedAddress] = await window.ethereum.request({
+            const [_selectedAddress] = await window.ethereum.request({
                 method: 'eth_requestAccounts',
             });
             setNetwork(true);
-            setUserAddress(selectedAddress);
+            setUserAddress(ethers.getAddress(_selectedAddress));
             if (provider !== null) {
-                assetFactoryInterface.current = new AssetFactoryInterface(provider, selectedAddress, reload);
+                assetFactoryInterface.current = new AssetFactoryInterface(provider, _selectedAddress, reload);
             }
             listenToWalletEvents();
         } catch (error: any) {
@@ -193,7 +193,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             });
             if (accounts.length > 0) {
                 listenToWalletEvents();
-                return { isWalletConnected: true, userAddress: accounts[0] };
+                return { isWalletConnected: true, userAddress: ethers.getAddress(accounts[0]) };
             }
             return { isWalletConnected: false, userAddress: null };
         } catch (error) {

@@ -69,6 +69,18 @@ export const ButtonStandard: React.FC<ButtonStandardProps> = ({ buttonName, hand
 };
 
 
+export const ButtonStandardToWallet: React.FC<ButtonStandardProps> = ({ buttonName, handleClick }) => {
+    return (
+        <div className="flex">
+            <button
+                className="btnSendtransaction px-3"
+                onClick={handleClick}>
+                {buttonName}
+            </button>
+        </div>
+    );
+};
+
 export const ButtonStandardArrowRight: React.FC<ButtonStandardProps> = ({ buttonName, handleClick }) => {
     const [isHovered, setIsHovered] = useState(false); // State to track hover
 
@@ -108,25 +120,5 @@ export const ButtonStandardArrowLeft: React.FC<ButtonStandardProps> = ({ buttonN
         </div>
     );
 };
-
-
-
-
-// export const TitleButton: React.FC<ButtonStandardProps> = ({ handleClick }) => {
-//     return (
-//         <div>
-
-//             <button
-//                 className="py-2 px-6 bg-gradient-to-r from-green-400 to-green-600 text-yellow rounded-full hover:bg-green-700 transition duration-300 shadow-lg"
-//                 onClick={handleClick}>
-//                 <>LOL</>
-//                 <div>Bana</div>
-//                 <div>Shara</div>
-//             </button>
-//         </div>
-//     );
-// };
-
-
 
 

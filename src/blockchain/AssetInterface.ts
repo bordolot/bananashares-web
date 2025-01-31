@@ -6,8 +6,8 @@ import { TxArgs_BuyShares, TxArgs_CancelOffer, TxArgs_ChangeOffer, TxArgs_MakeSe
 import { TxArgs_PutNewLicense, TxArgs_ActivateLicense, TxArgs_SignLicense, TxArgs_PayDividend } from "../utility/Interfaces";
 import { Info_Asset, Info_License, Info_RegularOffer, Info_User, Info_UserOffer } from "../utility/Interfaces";
 
-import { TOTAL_SUPLY } from "../utility/Globals";
-import { sortOffersByValuePerShare } from "./utilities/commonMethods";
+import { GAS_LIMIT_IN_PAY_DIVIDEND_BASE, GAS_LIMIT_IN_PAY_DIVIDEND_PER_ITERATION, TOTAL_SUPLY } from "../utility/Globals";
+import { checkIfUserIsPrivileged, sortOffersByValuePerShare } from "./utilities/commonMethods";
 
 export class AssetInterface extends ContractInterface {
 
@@ -16,6 +16,7 @@ export class AssetInterface extends ContractInterface {
     info_user: Info_User | undefined;
     info_userOffer: Info_UserOffer | undefined;
     info_allOffers: Info_RegularOffer[] | undefined;
+    isCurrentUserPrivileged: boolean = false;
 
     private isDuringExecution_updateLicenses: boolean = false;
     private wasCalledDuringExecution_updateLicenses: boolean = false;
@@ -133,6 +134,9 @@ export class AssetInterface extends ContractInterface {
                 }
             }
             this.info_user = newInfo;
+            if (this.info_asset) {
+                this.isCurrentUserPrivileged = checkIfUserIsPrivileged(newInfo.userAddress, this.info_asset);
+            }
             return { infoTaken: true };
         } catch (error: any) {
             console.warn("getUserInfo error: ", error);
@@ -256,8 +260,9 @@ export class AssetInterface extends ContractInterface {
             const tx = await this.signer.buyShares(
                 args.addressFrom,
                 args.amount,
-                args.sellLimit,
-                args.etherToPay,
+                args.sellLimit, {
+                value: args.etherToPay.toString() // Correctly set value in wei
+            }
                 // {
                 //     gasLimit: BigInt(GAS_LIMIT_IN_CREATE_ASSET)
                 // }
@@ -365,10 +370,9 @@ export class AssetInterface extends ContractInterface {
             }
             const tx = await this.signer.payDividend(
                 args.address,
-                args.howManyPayments,
-                // {
-                //     gasLimit: BigInt(GAS_LIMIT_IN_CREATE_ASSET)
-                // }
+                {
+                    gasLimit: BigInt(GAS_LIMIT_IN_PAY_DIVIDEND_BASE + Number(args.howManyPayments) * GAS_LIMIT_IN_PAY_DIVIDEND_PER_ITERATION)
+                }
             );
             this.txBeingSent = tx.hash;
         });
@@ -465,6 +469,7 @@ export class AssetInterface extends ContractInterface {
         _contract.on("Withdrawal", async (user, amount) => {
             console.log(`Withdrawal !!!!`);
             console.log(`user => ${user} amount => ${amount}`);
+            //@TODO find out why this condition is false while in real life shpuld be true
             if (this.info_user?.userAddress == user.toLowerCase()) {
                 await this._updateOffers();
             }

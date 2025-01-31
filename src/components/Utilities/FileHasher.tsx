@@ -125,7 +125,8 @@ const FileHasher: React.FC<FileHasherProps> = ({ keccak256String, setKeccak256St
 
                     <div className='flex'>
                         <InfoRevealer
-                            explanation='Your file content have been encoded into base64 format. This format helps keeping content in unchanged state during for example copy/paste between machines. Keep in mind that this encoded file will be hashed and this hash will be saved on blockchain.' />
+                            explanation='Your file content have been encoded into base64 format. This format helps keeping content in unchanged state during for example copy/paste between machines. Keep in mind that this encoded file will be hashed and this hash will be saved on blockchain.'
+                            width={1} />
                         <div className='textStandard'>Read {fileName} as: {base64String.slice(0, 10)}.....</div>
 
                     </div>
@@ -135,7 +136,10 @@ const FileHasher: React.FC<FileHasherProps> = ({ keccak256String, setKeccak256St
                         &&
                         <>
                             <div className='flex mb-1'>
-                                <InfoRevealer explanation={`Saves the encoded version of your file to your machine. The best practice is to keep one copy of this file in a safe place.\n\n Share both the original file and the hashed version with all interested parties. Both files can be used to confirm the ${typeOfService == 0 ? "asset\'s" : "license"} hash, but the encoded version is more reliable.\n\nCreates a hash of your ${typeOfService == 0 ? "manifest" : "license"} that will be saved on the blockchain.`} />
+                                <InfoRevealer explanation={<>Saves the encoded version of your file to your machine. The best practice is to keep one copy of this file in a safe place.<br /><br />Share both the original file and the hashed version with all interested parties. Both files can be used to confirm the {typeOfService == 0 ? "asset\'s" : "license"} hash, but the encoded version is more reliable.<br /><br />Creates a hash of your ${typeOfService == 0 ? "manifest" : "license"} that will be saved on the blockchain.</>}
+                                    width={1} />
+
+
 
                                 <div className='textStandard '>Save this file to generate hash:</div>
                             </div>
@@ -152,7 +156,8 @@ const FileHasher: React.FC<FileHasherProps> = ({ keccak256String, setKeccak256St
             {keccak256String && (
                 <div >
                     <div className='flex'>
-                        <InfoRevealer explanation={'You can create such a hash yourself using the keccak256 hashing algorithm.'} />
+                        <InfoRevealer explanation={'You can create such a hash yourself using the keccak256 hashing algorithm.'}
+                            width={1} />
                         <div className='textStandard'>Hash:</div>
                         <div className="mr-4"></div>
                         <div className='textStandard break-all'>{keccak256String}</div>
@@ -310,18 +315,20 @@ export const HashVeryfier: React.FC<HashVeryfierProps> = ({ trueKeccak256String,
                                     <>
                                         {
                                             (typeOfService && typeOfService === 1) ?
-                                                <InfoRevealer explanation={"Provided license doesn't describe sellected license."} />
+                                                <InfoRevealer explanation={"Provided license doesn't describe sellected license."} width={1} />
                                                 :
-                                                <InfoRevealer explanation={"This contract doesn't represent provided manifest."} />
+                                                <InfoRevealer explanation={"This contract doesn't represent provided manifest."} width={70} />
                                         }
                                     </>
                                     :
                                     <>
                                         {
                                             (typeOfService && typeOfService === 1) ?
-                                                <InfoRevealer explanation={"Provided license doesn't describe sellected license.Try uploading the base64 version of the license if it was shared by any privileged shareholder. But before that:\n\n 1. Contact any privileged shareholder and inform them about this situation.\n\n 2. Decode this file to a readable form (using, for example, free online base64 decoders) and review the license."} />
+                                                <InfoRevealer explanation={<>Provided license doesn't describe sellected license.Try uploading the base64 version of the license if it was shared by any privileged shareholder. But before that:<br /><br />1. Contact any privileged shareholder and inform them about this situation.<br /><br /> 2. Decode this file to a readable form (using, for example, free online base64 decoders) and review the license.</>} width={1} />
+
+
                                                 :
-                                                <InfoRevealer explanation={"This contract doesn't represent the provided manifest. Try uploading the base64 version of the manifest if it was shared by any privileged shareholder. But before that:\n\n 1. Contact any privileged shareholder and inform them about this situation.\n\n 2. Decode this file to a readable form (using, for example, free online base64 decoders) and review the manifest."} />
+                                                <InfoRevealer explanation={<>This contract doesn't represent the provided manifest. Try uploading the base64 version of the manifest if it was shared by any privileged shareholder. But before that:<br /><br /> 1. Contact any privileged shareholder and inform them about this situation.<br /><br /> 2. Decode this file to a readable form (using, for example, free online base64 decoders) and review the manifest.</>} width={1} />
                                         }
                                     </>
 

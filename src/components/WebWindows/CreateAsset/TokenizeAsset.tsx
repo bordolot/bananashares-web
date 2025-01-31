@@ -306,6 +306,7 @@ export function TokenizeAsset() {
                 <div className="flex mb-1">
                     <InfoRevealer
                         explanation={`The Manifest is a foundational document that describes the asset, the owner's rights, and how the asset will be managed within this protocol. It defines the rules and conditions under which the asset is governed and outlines the responsibilities and entitlements of the owner(s). Think of it as a digital contract that ensures transparency and clarity. \n\n Please provide this file in the most simple format such as .txt or similar.`}
+                        width={1}
                     />
                     <div className="textStandard">Upload asset manifest:</div>
                 </div>

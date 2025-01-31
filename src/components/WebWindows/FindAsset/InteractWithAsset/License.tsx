@@ -1,5 +1,5 @@
 import { useWallet } from "../../../../blockchain/WalletInterface";
-import { ButtonStandard } from "../../../../components_generic/Button";
+import { ButtonStandard, ButtonStandardToWallet } from "../../../../components_generic/Button";
 import InfoRevealer from "../../../../components_generic/InfoRevealer";
 import { TitleValueInOneLine } from "../../../../components_generic/SimpleCompenents";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";
@@ -61,7 +61,7 @@ export const License: React.FC<LicenseProps> = ({
 
 
     return (
-        <div>
+        <div className="bgOffer p-3 rounded-2xl">
             <TitleValueInOneLine
                 title={"Price:"}
                 distanse={"mr-2"}
@@ -74,7 +74,7 @@ export const License: React.FC<LicenseProps> = ({
             <div className="flex space-x-5">
                 <div className="flex">
                     {isActive &&
-                        <InfoRevealer explanation={"Before signing always review the decoded license."} />
+                        <InfoRevealer explanation={"Before signing always review the decoded license."} width={70} />
 
                     }
                     <div className="mr-1"></div>
@@ -83,13 +83,13 @@ export const License: React.FC<LicenseProps> = ({
                         buttonName="Verify hash" />
                 </div>
                 {isActive &&
-                    <ButtonStandard
+                    <ButtonStandardToWallet
                         handleClick={signLicense}
                         buttonName="Sign License" />
                 }
                 {isUserPrivileged
                     &&
-                    <ButtonStandard
+                    <ButtonStandardToWallet
                         handleClick={changeLicenseStatus}
                         buttonName={isActive ? "Deactivate" : "Activate"} />
                 }

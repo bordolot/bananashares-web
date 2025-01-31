@@ -109,10 +109,10 @@ export const OptionsForUser: React.FC = () => {
             ?
             <>
                 Your active offer:
-                <Offer
+                {/* <Offer
                     from={undefined}
                     amount={Number(assetInterface.current.info_userOffer.amount)}
-                    sharePrice={Number(assetInterface.current.info_userOffer.valuePerShare)} />
+                    sharePrice={Number(assetInterface.current.info_userOffer.valuePerShare)} /> */}
                 <ButtonStandard
                     handleClick={() => { setShouldShowChangeOffer(true) }}
                     buttonName="Change Offer" />

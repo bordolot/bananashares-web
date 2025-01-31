@@ -35,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = forwardRef(({ onNavbarClick, navbarRef }, 
 
 
     return (
-        <div ref={navbarRef} className="fixed top-0 w-full bg-black flex justify-between items-center h-24 text-white px-4 z-50">
+        <div ref={navbarRef} className="fixed top-0 w-full bg-black/80 flex justify-between items-center h-24 text-white px-4 z-50">
             {/* Title Button and Navigation */}
             <div className="flex items-center space-x-1">
                 {/* Title Button */}

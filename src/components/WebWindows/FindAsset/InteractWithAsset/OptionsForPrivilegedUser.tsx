@@ -1,35 +1,19 @@
 import React, { FormEvent, useState } from "react";
-import { ButtonStandard } from "../../../../components_generic/Button";
+import { ButtonStandard, ButtonStandardToWallet } from "../../../../components_generic/Button";
 import { Offer } from "./Offer";
 import ModalContent from "../../../Modals/Modal";
 import Form from "../../../../components_generic/Form";
 import { ModalSellShares } from "../../../Modals/ModalSellShares";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";
 import { useWallet } from "../../../../blockchain/WalletInterface";
-import { TxArgs_CancelOffer, TxArgs_MakeSellOffer, TxArgs_PayDividend, TxArgs_PayEarndFeesToAllPrivileged, TxArgs_Withdraw } from "../../../../utility/Interfaces";
+import { TxArgs_MakeSellOffer, TxArgs_PayDividend, TxArgs_PayEarndFeesToAllPrivileged, TxArgs_Withdraw } from "../../../../utility/Interfaces";
 import { getSharesFromSongInfo } from "../../../../blockchain/utilities/commonMethods";
+import { TitleValueInOneLine, ValueUnit } from "../../../../components_generic/SimpleCompenents";
+import InfoRevealer from "../../../../components_generic/InfoRevealer";
 
-// import { UserInfo, UserOffer } from "./InteractWithSong";
-
-
-// interface OptionsForPrivilegedUserProps {
-//     userInfo: UserInfo;
-//     userOffer: UserOffer | void;
-//     numberOfShares: number;
-//     makeSellOfferTx: (
-//         _amount: BigInt,
-//         _newPrice: BigInt) => void;
-//     cancelOfferTx: () => void;
-//     payEarndFeesToAllPrivilegedTx: () => void;
-//     payDividendTx: (
-//         _address: string,
-//         _howManyPayments: number) => void;
-//     withdrawTx: (
-//         _amount: BigInt) => void;
-// }
 
 export const OptionsForPrivilegedUser: React.FC = () => {
-    const { assetInterface } = useWallet();
+    const { assetInterface, userAddress } = useWallet();
 
     const [shouldShowSellOffer, setShouldShowSellOffer] = useState(false);
 
@@ -132,19 +116,6 @@ export const OptionsForPrivilegedUser: React.FC = () => {
 
     }
 
-    async function cancelOffer() {
-        try {
-            if (!assetInterface.current) {
-                throw Error("There was a problem with Asset contract interface.");
-            }
-            const _args: TxArgs_CancelOffer = {};
-            const result = await assetInterface.current.cancelOfferTx(_args);
-            if (!result) { throw Error("Transaction failed"); }
-        } catch (error: any) {
-            alert(error);
-        }
-    }
-
     if (!assetInterface.current) {
         return (<>No Asset Interface!!!</>)
     }
@@ -171,57 +142,93 @@ export const OptionsForPrivilegedUser: React.FC = () => {
             </ModalContent>
         )}
 
-        {assetInterface.current.info_userOffer.amount != 0 ?
-            <>
-                <div>Your pending offer:</div>
-                <Offer
-                    from={undefined}
-                    amount={assetInterface.current.info_userOffer.amount}
-                    sharePrice={assetInterface.current.info_userOffer.valuePerShare} />
-                <div className="flex">
-                    <ButtonStandard
-                        handleClick={cancelOffer}
-                        buttonName="Cancell Offer" />
-                    <ButtonStandard
-                        handleClick={() => { setShouldShowSellOffer(true) }}
-                        buttonName="Change Offer" />
+        <div className="flex flex-wrap gap-10">
+
+            {assetInterface.current.info_userOffer.amount != 0 ?
+                <>
+                    <Offer
+                        from={userAddress}
+                        amount={assetInterface.current.info_userOffer.amount}
+                        sharePrice={assetInterface.current.info_userOffer.valuePerShare}
+                        changeOffer={() => { setShouldShowSellOffer(true) }}
+                        title="Your pending offer:" />
+                </>
+                :
+
+                <div className="bgOffer p-3 rounded-2xl   h-full">
+                    <div className="textStandard">You have no offers.</div>
+                    <div className="mt-auto">
+                        <ButtonStandard
+                            handleClick={() => { setShouldShowSellOffer(true) }}
+                            buttonName="Make Sell Offer" />
+                    </div>
+
                 </div>
 
-            </>
-            :
-            <>
-                <div>You have no offers. Create one:</div>
-                <ButtonStandard
-                    handleClick={() => { setShouldShowSellOffer(true) }}
-                    buttonName="Make Sell Offer" />
-            </>
-        }
+            }
 
-        {assetInterface.current.info_user.isThereAnyDividend
-            ?
-            <>
-                <div>You have divident to collect: {Number(assetInterface.current.info_user.dividend) / WEI_IN_ETHER} [ether]</div>
-                <ButtonStandard
-                    handleClick={payDividend}
-                    buttonName="Collect" />
-            </>
-            : <></>}
+            {assetInterface.current.info_user.isThereAnyDividend
+                ?
 
-        {assetInterface.current.info_user.isThereAnyFees ?
-            <>
-                <div>You have fees to collect: {Number(assetInterface.current.info_user.fees) / WEI_IN_ETHER} [ether]</div>
-                <ButtonStandard
-                    handleClick={payFees}
-                    buttonName="Collect" />
-            </> : <></>}
+                <div className="bgOffer p-3 rounded-2xl h-full">
+                    <div className="textStandard">You have divident to collect.</div>
 
-        {assetInterface.current.info_user.isThereAnyEther ?
-            <>
-                <div>You can withdraw: {Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER} [ether]</div>
-                <ButtonStandard
-                    handleClick={payEther}
-                    buttonName="Withdraw" />
-            </> : <></>}
+                    <TitleValueInOneLine
+                        title="Amount:"
+                        distanse={"mr-2"}
+                        value={
+                            <div className="flex">
+                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.dividend)} unit={"WEI"} />} />
+                                {(Number(assetInterface.current.info_user.dividend) / WEI_IN_ETHER).toFixed(5)} ETH
+                            </div>} />
+
+                    <ButtonStandardToWallet
+                        handleClick={payDividend}
+                        buttonName="Collect" />
+                </div>
+
+
+                : <></>}
+
+            {assetInterface.current.info_user.isThereAnyFees ?
+                <div className="bgOffer p-3 rounded-2xl h-full">
+                    <div className="textStandard">You have fees to collect.</div>
+                    <TitleValueInOneLine
+                        title="Amount:"
+                        distanse={"mr-2"}
+                        value={
+                            <div className="flex">
+                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.fees)} unit={"WEI"} />} />
+                                {(Number(assetInterface.current.info_user.fees) / WEI_IN_ETHER).toFixed(5)} ETH
+                            </div>} />
+                    <ButtonStandardToWallet
+                        handleClick={payFees}
+                        buttonName="Collect" />
+                </div>
+                : <></>}
+
+            {assetInterface.current.info_user.isThereAnyEther ?
+
+                <div className="bgOffer p-3 rounded-2xl h-full">
+                    <div className="textStandard">You can withdraw ether.</div>
+                    <TitleValueInOneLine
+                        title="Amount:"
+                        distanse={"mr-2"}
+                        value={
+                            <div className="flex">
+                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.ether)} unit={"WEI"} />} />
+                                {(Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER).toFixed(5)} ETH
+                            </div>} />
+                    <ButtonStandardToWallet
+                        handleClick={payEther}
+                        buttonName="Withdraw" />
+                </div>
+
+
+
+                : <></>}
+
+        </div>
 
     </>)
 }

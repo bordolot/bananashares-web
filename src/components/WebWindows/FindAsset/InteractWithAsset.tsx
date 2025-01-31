@@ -3,7 +3,6 @@ import { useWallet } from "../../../blockchain/WalletInterface";
 import { AssetInfoComponent } from "./InteractWithAsset/AssetInfoComponent";
 import { useEffect } from "react";
 import { Licenses } from "./InteractWithAsset/Licenses";
-import { checkIfUserIsPrivileged } from "../../../blockchain/utilities/commonMethods";
 import { OptionsForPrivilegedUser } from "./InteractWithAsset/OptionsForPrivilegedUser";
 import { OptionsForUser } from "./InteractWithAsset/OptionsForUser";
 import { Offers } from "./InteractWithAsset/Offers";
@@ -46,15 +45,18 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
 
                 {/* Licenses */}
                 <div className="mb-4"></div>
-                <Licenses isUserPrivileged={checkIfUserIsPrivileged(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)} />
+                <Licenses isUserPrivileged={assetInterface.current.isCurrentUserPrivileged} />
 
                 {/* User info */}
                 <div className="mb-10"></div>
-                {checkIfUserIsPrivileged(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)
+                {assetInterface.current.isCurrentUserPrivileged
                     ?
                     <>
                         {/* Privileged User */}
-                        <div className="textHeader">You have aditional options:</div>
+                        <div className="relative w-full">
+                            <div className="textHeader">You have aditional options:</div>
+                            <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+                        </div>
                         <OptionsForPrivilegedUser />
                     </>
                     :
@@ -68,7 +70,11 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
 
                 {/* Offers */}
                 <div className="my-10"></div>
-                <div className="textHeader">All offers:</div>
+
+                <div className="relative w-full">
+                    <div className="textHeader">All offers:</div>
+                    <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+                </div>
                 <Offers />
 
 

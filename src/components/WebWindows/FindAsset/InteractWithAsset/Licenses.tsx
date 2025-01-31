@@ -85,29 +85,6 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
 
 
 
-    // async function activateLicense() {
-    //     try {
-    //         if (!assetInterface.current) {
-    //             throw Error("There was a problem with Asset contract interface.");
-    //         }
-    //         if (!activeNotActiveLicense) {
-    //             throw Error("Set a proper value to activate the license.");
-    //         }
-    //         const _args: TxArgs_ActivateLicense = {
-    //             licenseHash: activeNotActiveLicense.hash,
-    //             activate: true,
-    //         };
-    //         const result = assetInterface.current.activateLicenseTx(_args);
-    //         if (!result) { throw Error("Transaction failed"); }
-
-    //     } catch (error: any) {
-    //         alert(error)
-    //     }
-    // }
-
-
-
-
     if (!userAddress) {
         return (<>No User address detected. Are you really connected?</>)
     }
@@ -135,7 +112,12 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
 
 
 
-            <div className="textHeader">Licenses:</div>
+
+            <div className="relative w-full">
+                <div className="textHeader">Licenses:</div>
+                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+            </div>
+
 
             {/* Create new license */}
             {isUserPrivileged
@@ -185,12 +167,14 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
                                     onSelect={handleDropdownSelect}
                                     renderOption={(option) => <span>{option.hash}</span>}
                                 />
-
-
                             </div>
 
+                            <div className="mb-3"></div>
+
                             {activeNotActiveLicense &&
-                                <div>
+
+
+                                <div className="flex flex-wrap gap-10">
                                     <License
                                         isUserPrivileged={isUserPrivileged}
                                         hash={activeNotActiveLicense.hash}
@@ -198,13 +182,8 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
                                         isActive={activeNotActiveLicense.isActive}
                                         verifyLicense={() => { setShouldCheckAgr(true); handleSelect(activeNotActiveLicense) }}
                                     />
-                                    {/* <div>Selected license: {activeNotActiveLicense.hash}</div>
-                                    <div>Price: {Number(activeNotActiveLicense.value) / WEI_IN_ETHER} ether</div>
-                                    {isUserPrivileged &&
-                                        <ButtonStandard
-                                            handleClick={activateLicense}
-                                            buttonName="Activate" />} */}
-                                </div>}
+                                </div>
+                            }
                         </>
                     }
 

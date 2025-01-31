@@ -57,7 +57,12 @@ export const AssetInfoComponent: React.FC = () => {
             )}
 
 
-            <div className="textHeader">Asset</div>
+
+
+            <div className="relative w-full">
+                <div className="textHeader">Asset</div>
+                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+            </div>
             <TitleValueInOneLine
                 title={"Title:"}
                 distanse={"mr-4"}
@@ -68,7 +73,7 @@ export const AssetInfoComponent: React.FC = () => {
                 value={assetInterface.current.info_asset.hash} />
 
             <div className="flex">
-                <InfoRevealer explanation={"Always review the decoded manifest before using the contract."} />
+                <InfoRevealer explanation={"Always review the decoded manifest before using the contract."} width={100} />
                 <div className="mr-1"></div>
                 <ButtonStandard
                     buttonName="Verify hash"
@@ -77,7 +82,12 @@ export const AssetInfoComponent: React.FC = () => {
             </div>
 
 
-            <div className="textHeader mt-10">Privileged shareholders:</div>
+
+
+            <div className="relative w-full">
+                <div className="textHeader mt-10">Privileged shareholders:</div>
+                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+            </div>
             <div className="flex flex-wrap gap-10">
                 {assetInterface.current.info_asset.names.map((name, index) => (
                     <div className=" mb-5" key={index}>
@@ -93,10 +103,10 @@ export const AssetInfoComponent: React.FC = () => {
                             title={"Shares:"}
                             distanse={"mr-5"}
                             value={
-                                <>
+                                <div className="">
                                     {Number(assetInterface.current?.info_asset?.shares[index])}
                                     <div className="textStandard">{(Number(assetInterface.current?.info_asset?.shares[index]) / TOTAL_SUPLY * 100).toFixed(2)}%</div>
-                                </>
+                                </div>
                             } />
 
                     </div>
