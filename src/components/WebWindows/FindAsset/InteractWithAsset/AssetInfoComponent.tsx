@@ -70,7 +70,7 @@ export const AssetInfoComponent: React.FC = () => {
             <TitleValueInOneLine
                 title={"Hash:"}
                 distanse={"mr-3"}
-                value={assetInterface.current.info_asset.hash} />
+                value={<div className="break-all">{assetInterface.current.info_asset.hash}</div>} />
 
             <div className="flex">
                 <InfoRevealer explanation={"Always review the decoded manifest before using the contract."} width={100} />
@@ -98,7 +98,7 @@ export const AssetInfoComponent: React.FC = () => {
                         <TitleValueInOneLine
                             title={"Address:"}
                             distanse={"mr-2"}
-                            value={assetInterface.current?.info_asset?.addresses[index] ?? ""} />
+                            value={<div className="break-all">{assetInterface.current?.info_asset?.addresses[index] ?? ""}</div>} />
                         <TitleValueInOneLine
                             title={"Shares:"}
                             distanse={"mr-5"}

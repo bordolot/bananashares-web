@@ -74,7 +74,10 @@ export const Offers: React.FC = () => {
             const formated_number_of_shares = BigInt(number_of_shares)
 
             const uint128Max = 2 ** 128 - 1;
-            const price_per_share_in_WEI = new_price_per_share * WEI_IN_ETHER
+            let price_per_share_in_WEI = new_price_per_share * WEI_IN_ETHER
+            if (assetInterface.current.isCurrentUserPrivileged) {
+                price_per_share_in_WEI = MIN_SELL_OFFER;
+            }
 
             if (price_per_share_in_WEI < MIN_SELL_OFFER || price_per_share_in_WEI > uint128Max) {
                 throw Error(`Please correct price per share.`);
@@ -132,7 +135,7 @@ export const Offers: React.FC = () => {
 
         <div className="flex flex-wrap gap-10">
             {assetInterface.current.info_allOffers
-                // .sort((a, b) => a.valuePerShare - b.valuePerShare)
+                .sort((a, b) => a.valuePerShare - b.valuePerShare)
                 .map((offer, index) => (
                     <InAllOffer
                         key={index}

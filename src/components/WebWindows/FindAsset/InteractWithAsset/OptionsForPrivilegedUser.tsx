@@ -170,8 +170,8 @@ export const OptionsForPrivilegedUser: React.FC = () => {
             {assetInterface.current.info_user.isThereAnyDividend
                 ?
 
-                <div className="bgOffer p-3 rounded-2xl h-full">
-                    <div className="textStandard">You have divident to collect.</div>
+                <div className="bgOffer p-3 rounded-2xl h-full ">
+                    <div className="textStandard">You have dividend to collect.</div>
 
                     <TitleValueInOneLine
                         title="Amount:"
@@ -186,6 +186,9 @@ export const OptionsForPrivilegedUser: React.FC = () => {
                         handleClick={payDividend}
                         buttonName="Collect" />
                 </div>
+
+
+
 
 
                 : <></>}

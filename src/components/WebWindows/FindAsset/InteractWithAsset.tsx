@@ -63,6 +63,10 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
                     <>
                         {/* Normal User */}
                         <>
+                            <div className="relative w-full">
+                                <div className="textHeader">Your standard options:</div>
+                                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-black"></div>
+                            </div>
                             <OptionsForUser />
                         </>
                     </>

@@ -16,6 +16,7 @@ export class AssetInterface extends ContractInterface {
     info_user: Info_User | undefined;
     info_userOffer: Info_UserOffer | undefined;
     info_allOffers: Info_RegularOffer[] | undefined;
+
     isCurrentUserPrivileged: boolean = false;
 
     private isDuringExecution_updateLicenses: boolean = false;
@@ -29,11 +30,18 @@ export class AssetInterface extends ContractInterface {
     constructor(_provider: ethers.BrowserProvider, _assetAddr: string, callTheOwner: () => void) {
         // Call the parent class constructor with arguments
         super(_assetAddr, assetAbi.abi, _provider, callTheOwner);
-        if (this.contract !== undefined) {
-            this._intializeAssetListeners(this.contract);
-        }
     }
 
+    async init(): Promise<boolean> {
+        return new Promise(async (resolve, reject) => {
+            if (this.contract !== undefined) {
+                await this._intializeAssetListeners(this.contract);
+            } else {
+                reject(false)
+            }
+            resolve(true);
+        });
+    }
 
     //@TODO
     async getAssetInfo(): Promise<{ infoTaken: boolean }> {
@@ -127,12 +135,13 @@ export class AssetInterface extends ContractInterface {
                     newInfo.isThereAnyFees = true
                     newInfo.fees = result_2
                 }
-                const result_3 = await this.contract.balances(_userAddress)
-                if (result_3 > 0) {
-                    newInfo.isThereAnyEther = true
-                    newInfo.ether = result_3
-                }
             }
+            const result_3 = await this.contract.balances(_userAddress)
+            if (result_3 > 0) {
+                newInfo.isThereAnyEther = true
+                newInfo.ether = result_3
+            }
+
             this.info_user = newInfo;
             if (this.info_asset) {
                 this.isCurrentUserPrivileged = checkIfUserIsPrivileged(newInfo.userAddress, this.info_asset);
@@ -175,23 +184,25 @@ export class AssetInterface extends ContractInterface {
 
             const result_1 = await this.contract.getOffersLength()
             let offers: Info_RegularOffer[] = [];
-            // let _isPrivileged: boolean;
 
+            let _isPrivileged: boolean = false;
             let _isThereAnyFees: boolean = false;
+            // only privlileged can have fees to collect
             const result_2 = Number(await this.contract.getPrivilegedFees(this.info_asset.addresses[0]));
-            if (result_2 > 0) {
-                _isThereAnyFees = true;
-            }
 
             let _isThereAnyDividend: boolean;
             let _howMany: bigint;
-
             let result_1_1;
             if (result_1 != 0) {
                 let object: any;
                 for (let i = 1; i <= result_1; i++) {
                     object = await this.contract.getOffer(i);
-                    // _isPrivileged = checkIfUserIsPrivileged(object[0], this.info_asset);
+                    _isPrivileged = checkIfUserIsPrivileged(object[0], this.info_asset);
+                    if (_isPrivileged && result_2 > 0) {
+                        _isThereAnyFees = true;
+                    } else {
+                        _isThereAnyFees = false;
+                    }
                     result_1_1 = await this.contract.dividendToPay(object[0]);
                     _howMany = result_1_1[1];
                     _isThereAnyDividend = false;
@@ -382,6 +393,10 @@ export class AssetInterface extends ContractInterface {
     // EVENT LISTERNERS
     //
 
+    async removeListeners() {
+        await this.contract?.removeAllListeners()
+    }
+
     private _updateOffers = async () => {
         if (this.isDuringExecution_updateOffers) {
             this.wasCalledDuringExecution_updateOffers = true;
@@ -434,15 +449,12 @@ export class AssetInterface extends ContractInterface {
         }
     }
 
-
-    private _intializeAssetListeners(_contract: ethers.Contract) {
-
+    private async _intializeAssetListeners(_contract: ethers.Contract) {
         _contract.on("SellOfferPut", async (from, amount, value,) => {
             //@TODO add any info or allert with this info for users
             console.log(`Offer created!!!!`);
             console.log(`from => ${from}, amount => ${amount}, value => ${value}`);
             await this._updateOffers();
-
         })
 
         _contract.on("OfferCancelled", async (from) => {
@@ -470,7 +482,8 @@ export class AssetInterface extends ContractInterface {
             console.log(`Withdrawal !!!!`);
             console.log(`user => ${user} amount => ${amount}`);
             //@TODO find out why this condition is false while in real life shpuld be true
-            if (this.info_user?.userAddress == user.toLowerCase()) {
+            // console.log(user.toLowerCase())
+            if (this.info_user?.userAddress.toLowerCase() == user.toLowerCase()) {
                 await this._updateOffers();
             }
         })

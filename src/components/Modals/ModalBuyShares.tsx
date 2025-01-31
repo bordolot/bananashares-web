@@ -12,12 +12,14 @@ interface BuySharesFormProps {
 
 export function ModalBuySharesForm({ numberOfShares, pricePerShare, isUserPrivileged }: BuySharesFormProps) {
 
+    const [sharesAvailable, setSharesAvailable] = useState(numberOfShares);
     const [finalPrice, setFinalPrice] = useState(0);
 
     const handlePriceChange = () => (event: ChangeEvent<HTMLInputElement>) => {
         let _value = parseFloat(event.target.value);
         if (isNaN(_value)) _value = 0;
         setFinalPrice(_value * pricePerShare);
+        setSharesAvailable(numberOfShares - _value);
     };
 
 
@@ -26,7 +28,7 @@ export function ModalBuySharesForm({ numberOfShares, pricePerShare, isUserPrivil
             <TitleValueInOneLine
                 title={"Shares available for purchase:"}
                 distanse={"mr-3"}
-                value={numberOfShares} />
+                value={sharesAvailable} />
             <div className="mb-2"></div>
             <TitleValueInOneLine
                 title={"Price per share:"}
@@ -42,7 +44,7 @@ export function ModalBuySharesForm({ numberOfShares, pricePerShare, isUserPrivil
 
             <div className="textStandard">Specify number of shares to buy:</div>
             <input
-                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-60 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="number"
                 min="0"
                 max={numberOfShares}
@@ -75,7 +77,7 @@ export function ModalBuySharesForm({ numberOfShares, pricePerShare, isUserPrivil
                     </div>
 
                     <input
-                        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="w-60 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         type="number"
                         min="0"
                         step={MIN_SELL_OFFER / WEI_IN_ETHER}

@@ -31,7 +31,7 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
                 alert("Asset contract doesn't exist."); return;
             }
 
-            const _isInterfaceCreated = createAssetInterface(_contractAddress);
+            const _isInterfaceCreated = await createAssetInterface(_contractAddress);
             if (!_isInterfaceCreated) {
                 alert("There was a problem connecting Asset contract."); return;
             }
@@ -98,7 +98,7 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
 
             <div className="textHeader">Connect to your asset</div>
             <form onSubmit={tryToConnectToAssetByAddress}>
-                <div className="mb-6">
+                <div className="mb-2">
                     <div className="textStandard">By asset address:</div>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -108,7 +108,7 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
                         required
                     />
                 </div>
-                <div className="mb-6">
+                <div className="mb-10">
                     <input
                         className="btnInteract"
                         type="submit"
@@ -118,7 +118,7 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
             </form>
 
             <form onSubmit={tryToConnectToAssetByHash}>
-                <div className="mb-6">
+                <div className="mb-2">
                     <div className="textStandard">By asset hash:</div>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

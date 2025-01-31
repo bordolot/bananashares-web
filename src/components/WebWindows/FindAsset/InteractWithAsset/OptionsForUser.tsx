@@ -1,16 +1,18 @@
 import { FormEvent, useState } from "react";
 import { Offer } from "./Offer";
-import { ButtonStandard } from "../../../../components_generic/Button";
+import { ButtonStandard, ButtonStandardToWallet } from "../../../../components_generic/Button";
 import ModalContent from "../../../Modals/Modal";
 import Form from "../../../../components_generic/Form";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";
 import { TxArgs_ChangeOffer, TxArgs_PayDividend, TxArgs_Withdraw } from "../../../../utility/Interfaces";
 import { ModalChangeSharesForm } from "../../../Modals/ModalChangeSharesForm";
 import { useWallet } from "../../../../blockchain/WalletInterface";
+import { TitleValueInOneLine, ValueUnit } from "../../../../components_generic/SimpleCompenents";
+import InfoRevealer from "../../../../components_generic/InfoRevealer";
 
 export const OptionsForUser: React.FC = () => {
     // export function OptionsForUser({ userInfo, userOffer, changeOfferTx, payDividendTx, withdrawTx }: OptionsForUserProps) {
-    const { assetInterface } = useWallet();
+    const { assetInterface, userAddress } = useWallet();
 
     const [shouldShowChangeOffer, setShouldShowChangeOffer] = useState(false);
 
@@ -103,55 +105,86 @@ export const OptionsForUser: React.FC = () => {
             </ModalContent>
         )}
 
-        <h4 className="my-1 text-3xl">Your standard options:</h4>
+        <div className="flex flex-wrap gap-4">
 
-        {(assetInterface.current.info_userOffer.amount > 0)
-            ?
-            <>
-                Your active offer:
-                {/* <Offer
+
+
+            {(assetInterface.current.info_userOffer.amount > 0)
+                &&
+                <>
+                    {/* <Offer
                     from={undefined}
                     amount={Number(assetInterface.current.info_userOffer.amount)}
                     sharePrice={Number(assetInterface.current.info_userOffer.valuePerShare)} /> */}
-                <ButtonStandard
+                    <Offer
+                        from={userAddress}
+                        amount={assetInterface.current.info_userOffer.amount}
+                        sharePrice={assetInterface.current.info_userOffer.valuePerShare}
+                        changeOffer={() => { setShouldShowChangeOffer(true) }}
+                        title="Your pending offer:" />
+
+
+                    {/* <ButtonStandard
                     handleClick={() => { setShouldShowChangeOffer(true) }}
-                    buttonName="Change Offer" />
-            </>
-            :
-            <>
-                You have no active offers.
-            </>
-        }
-        <div className="my-4"></div>
-        {(assetInterface.current.info_user.isThereAnyDividend)
-            ?
-            <>
-                <div>You have divident to collect: {Number(assetInterface.current.info_user.dividend) / WEI_IN_ETHER} [ether]</div>
-                <ButtonStandard
-                    handleClick={payDividend}
-                    buttonName="Collect" />
-            </>
-            :
-            <>
-                You have no dividends to collect.
-            </>
-        }
-        <div className="my-4"></div>
-        {(assetInterface.current.info_user.isThereAnyEther)
-            ?
-            <>
-                <>
-                    <div>You can withdraw: {Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER} [ether]</div>
-                    <ButtonStandard
+                    buttonName="Change Offer" /> */}
+                </>
+            }
+
+
+            {(assetInterface.current.info_user.isThereAnyDividend)
+                &&
+                <div className="bgOffer p-3 rounded-2xl h-full">
+                    <div className="textStandard">You have dividend to collect.</div>
+
+                    <TitleValueInOneLine
+                        title="Amount:"
+                        distanse={"mr-2"}
+                        value={
+                            <div className="flex">
+                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.dividend)} unit={"WEI"} />} />
+                                {(Number(assetInterface.current.info_user.dividend) / WEI_IN_ETHER).toFixed(5)} ETH
+                            </div>} />
+
+                    <ButtonStandardToWallet
+                        handleClick={payDividend}
+                        buttonName="Collect" />
+                </div>
+            }
+
+            {(assetInterface.current.info_user.isThereAnyEther)
+                &&
+                <div className="bgOffer p-3 rounded-2xl h-full">
+                    <div className="textStandard">You can withdraw ether.</div>
+                    <TitleValueInOneLine
+                        title="Amount:"
+                        distanse={"mr-2"}
+                        value={
+                            <div className="flex">
+                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.ether)} unit={"WEI"} />} />
+                                {(Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER).toFixed(5)} ETH
+                            </div>} />
+                    <ButtonStandardToWallet
                         handleClick={payEther}
                         buttonName="Withdraw" />
-                </>
-            </>
-            :
-            <>
-                You have no ether to withdraw.
-            </>
+                </div>
+
+            }
+
+        </div>
+
+        <div className="mb-5"></div>
+        {assetInterface.current.info_userOffer.amount == 0 &&
+            <div className="textStandard">You have no active offers.</div>
         }
+        {!assetInterface.current.info_user.isThereAnyDividend &&
+            <div className="textStandard">You have no dividends to collect.</div>
+        }
+        {!assetInterface.current.info_user.isThereAnyEther &&
+            <div className="textStandard">You have no ether to withdraw.</div>
+        }
+
+
+
 
 
         {/* <Offer /> */}

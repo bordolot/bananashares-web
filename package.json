@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "address": "node test/utilities/createRandomAddress.js"
   },
   "dependencies": {
     "ethers": "^6.13.5",

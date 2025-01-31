@@ -26,7 +26,7 @@ interface WalletContextType {
     assetInterface: React.MutableRefObject<AssetInterface | null>;
     reloadKey: number;
     connectWallet: () => Promise<void>;
-    createAssetInterface: (a: string) => boolean;
+    createAssetInterface: (a: string) => Promise<boolean>;
     deleteAssetInterface: () => void;
     reload: () => void;
 }
@@ -151,14 +151,21 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     };
 
-    const createAssetInterface = (_assetAddr: string): boolean => {
+    const createAssetInterface = async (_assetAddr: string): Promise<boolean> => {
         try {
-            if (provider !== null && assetFactoryInterface.current !== null) {
-                assetInterface.current = new AssetInterface(provider, _assetAddr, reload);
-                return true;
-            } else {
+            if (provider === null) {
                 return false;
             }
+            if (assetFactoryInterface.current === null) {
+                return false;
+            }
+            await assetInterface.current?.removeListeners();
+            assetInterface.current = new AssetInterface(provider, _assetAddr, reload);
+            const initiated = await assetInterface.current?.init();
+            if (initiated) {
+                return true;
+            }
+            return false;
         } catch (error: any) {
             return false;
         }

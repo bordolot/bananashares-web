@@ -42,9 +42,11 @@ export const Offer: React.FC<OfferProps> = ({ from, amount, sharePrice, changeOf
                 {title && <div className="textStandardBold ">{title}</div>}
                 <StandardOfferDesc from={from} amount={amount} sharePrice={sharePrice} />
                 <div className="flex space-x-3">
-                    <ButtonStandardToWallet
-                        handleClick={cancelOffer}
-                        buttonName="Cancell Offer" />
+                    {assetInterface.current?.isCurrentUserPrivileged ?
+                        <ButtonStandardToWallet
+                            handleClick={cancelOffer}
+                            buttonName="Cancell Offer" /> : <></>
+                    }
                     <ButtonStandard
                         handleClick={changeOffer}
                         buttonName="Change Offer" />
@@ -124,13 +126,16 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
                                 :
                                 (<>
                                     {offer.isThereAnyDividend && (
-                                        <>
-                                            <InfoRevealer explanation={<div>To buy shares from this user, you need to collect their dividend for them.<br /> There are {offer.howManyPayments} payments to collect.</div>} width={1} />
+                                        <div className="flex">
+                                            <InfoRevealer explanation={<div>To buy shares from this user, you need to collect their dividend for them.<br /> There {offer.howManyPayments == 1 ? "is" : "are"} {offer.howManyPayments} payments to collect.</div>} width={70} />
                                             <ButtonStandardToWallet buttonName={"Pay dividend"} handleClick={handlePayDividend(offer)} />
-                                        </>
+                                        </div>
                                     )}
                                     {offer.isThereAnyFees && (
-                                        <ButtonStandard buttonName={"Pay fees"} handleClick={handlePayFees(offer)} />
+                                        <div className="flex">
+                                            <InfoRevealer explanation={<div>To buy shares from this user, you need to collect their fees for them.</div>} width={70} />
+                                            <ButtonStandardToWallet buttonName={"Pay fees"} handleClick={handlePayFees(offer)} />
+                                        </div>
                                     )}
                                     {!offer.isThereAnyDividend && !offer.isThereAnyFees && (
                                         <ButtonStandard buttonName={"Buy shares"} handleClick={handleBuyShares(offer)} />

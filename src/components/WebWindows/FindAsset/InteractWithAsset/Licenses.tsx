@@ -10,6 +10,7 @@ import { HashVeryfier } from "../../../Utilities/FileHasher";
 import { useWallet } from "../../../../blockchain/WalletInterface";
 import { License } from "./License";
 import { TitleValueInOneLine } from "../../../../components_generic/SimpleCompenents";
+import InfoRevealer from "../../../../components_generic/InfoRevealer";
 
 interface LicensesProps {
     isUserPrivileged: boolean;
@@ -134,7 +135,7 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
                 && assetInterface.current.info_allLicenses[0].length > 0)
                 ?
                 <>
-                    <div className="flex flex-wrap gap-10">
+                    <div className="flex flex-wrap gap-5">
                         {assetInterface.current.info_allLicenses[0].map((license, index) => (
                             <div className=" mb-5" key={index}>
                                 <License
@@ -159,6 +160,7 @@ export const Licenses: React.FC<LicensesProps> = ({ isUserPrivileged }) => {
                         <>
 
                             <div className="flex items-center ">
+                                <InfoRevealer explanation={<>Deactivated licenses are available only for privileged shareholders.</>} width={1} />
                                 <div className="textStandard">Deactivated licenses:</div>
                                 <div className="mr-1"></div>
                                 <Dropdown<Info_License>
