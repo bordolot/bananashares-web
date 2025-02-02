@@ -37,7 +37,8 @@ const Footer = () => {
     return (
         <>
             {/* fixed */}
-            <div className="w-full bg-slate-900 text-gray-300 py-y px-2 bottom-0">
+            {/* <div className="w-full bg-slate-900 text-gray-300 py-y px-2 bottom-0"> */}
+            <div className="w-full bg-green-600 text-gray-300 py-y px-2 bottom-0">
                 <div className="max-w-[1240px] mx-auto grid grid-cols-2 md:grid-cols-6 border-b-2 border-gray-600 py-8">
 
                     <div className='col-span-2 pt-8 md:pt-2'>
@@ -56,15 +57,15 @@ const Footer = () => {
                 </div>
 
                 <div className='flex flex-col max-w-[1240px] px-2 py-4 mx-auto justify-between
-                    sm:flex-row text-gray-500'>
+                    sm:flex-row text-yellow-400'>
                     <p className='pt-2 text-xs'>
                         DISCLAIMER: BananaShares is a technology services provider. Use of the BananaShares Protocol involves risks, including but not limited to the potential loss of digital assets. Before using the BananaShares Protocol, you should review our documentation to ensure you understand how the Protocol works. As described in our Terms, the BananaShares Protocol is provided on an “as is” and “as available” basis, at your own risk. We explicitly disclaim any representation or warranties of any kind relating to the Protocol, and no developer or entity will be liable for claims or damages of any kind associated with use or inability to use the Protocol.
                     </p>
                 </div>
                 <div className='flex flex-col max-w-[1240px] px-2 py-4 mx-auto justify-between
-                    sm:flex-row text-center text-gray-500'>
+                    sm:flex-row text-center text-yellow-400'>
                     <p className='py-2'>
-                        Copyright © BananaShares 2024
+                        Copyright © Bananashares 2025
                     </p>
                 </div>
             </div>

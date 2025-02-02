@@ -47,8 +47,8 @@ const Navbar: React.FC<NavbarProps> = forwardRef(({ onNavbarClick, navbarRef }, 
                         {navItems.map((item) => (
                             <li
                                 key={item.id}
-                                className="hover:bg-[#00df9a] whitespace-nowrap px-4 py-2 rounded-lg cursor-pointer
-                                    duration-300 text-yellow-400 hover:text-black"
+                                className="hover:bg-green-600 whitespace-nowrap px-4 py-2 rounded-lg cursor-pointer
+                                    duration-300 text-yellow-400 font-bold"
                                 onClick={() => onNavbarClick(item.text)}
                             >
                                 {item.text}

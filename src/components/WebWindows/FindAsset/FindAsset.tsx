@@ -32,7 +32,7 @@ const FindAsset: React.FC = () => {
         setShowConnectToAsset(false);
     };
 
-    if (loading) { return <Spinner />; }
+    // if (loading) { return <Spinner />; }
     if (provider === null) { return <NoWalletDetected />; }
     if (userAddress === null) { return <ConnectWallet />; }
 

@@ -23,16 +23,16 @@
         animation: move-right 0.6s ease-in-out infinite;
       }
 
-      .animate-move-left {
-        animation: move-right 0.6s ease-in-out infinite reverse;
-      }
+    .animate-move-left {
+    animation: move-right 0.6s ease-in-out infinite reverse;
+    }
 
   }
 
 
 @layer components {
     .btnSendtransaction {
-      @apply w-full cursor-pointer py-2 px-6 bg-[#00df9a] rounded-xl text-black hover:bg-[#9ab5df] duration-500;
+      @apply w-full cursor-pointer py-2 px-6 bg-green-600 rounded-xl text-yellow-400 font-bold hover:text-green-600 hover:bg-yellow-400 duration-500;
     }
     .btnInteract {
         @apply font-bold cursor-pointer py-2 px-3 rounded-xl bg-[#1c2972] hover:bg-[#1c213a] text-yellow-400;
@@ -43,21 +43,27 @@
     .btnInteractBlocked {
         @apply font-bold py-2 px-3 rounded-xl bg-gray-400 cursor-not-allowed;
     }
-
+    .btnContents {
+        @apply w-full text-xl text-left cursor-pointer rounded-xl hover:bg-white/30 duration-500;
+      }
 
     /* .textStandard {
         @apply my-4 text-xl;
     } */
 
+    .textStandardInAbout {
+        @apply font-mono  text-base;
+        /* @apply text-lg; */
+    }
     .textStandard {
-        @apply text-base;
+        @apply   text-base;
         /* @apply text-lg; */
     }
     .textInOffer {
         @apply text-base;
     }
     .textStandardBold {
-        @apply text-base font-bold;
+        @apply  text-base font-bold;
         /* @apply text-lg font-bold; */
     }
     .textHeader {
@@ -75,6 +81,7 @@
         @apply  bg-gray-300 ;
     }
 
+    
 
   }
 

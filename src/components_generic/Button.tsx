@@ -122,3 +122,18 @@ export const ButtonStandardArrowLeft: React.FC<ButtonStandardProps> = ({ buttonN
 };
 
 
+interface ContentsButtonProps {
+    title: string;
+    onBtnClick: () => void;
+}
+
+export const ContentsButton: React.FC<ContentsButtonProps> = ({ title, onBtnClick }) => {
+    return (
+        <div>
+            <button className="btnContents" onClick={onBtnClick}>
+                {title}
+            </button>
+        </div>
+
+    );
+}

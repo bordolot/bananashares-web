@@ -48,7 +48,7 @@ export const CreateAsset: React.FC<CreateAssetProps> = () => {
         }
     }
 
-    if (loading) { return <Spinner />; }
+    // if (loading) { return <Spinner />; }
     if (provider === null) { return <NoWalletDetected />; }
     if (userAddress === null) { return <ConnectWallet />; }
     return (

@@ -22,13 +22,13 @@ function App() {
   // const howItWorksRef = useRef<HTMLDivElement>(null);
   // const faqRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLDivElement>(null);
-  // const [navbarHeight, setNavbarHeight] = useState(0);
+  const [navbarHeight, setNavbarHeight] = useState(0);
 
   useEffect(() => {
     // console.clear();
     console.log("rayman App start!")
     if (navbarRef.current) {
-      // setNavbarHeight(navbarRef.current.offsetHeight);
+      setNavbarHeight(navbarRef.current.offsetHeight);
     }
   }, []);
 
@@ -42,19 +42,25 @@ function App() {
     <>
       <WalletProvider>
         <Navbar onNavbarClick={handleNavbarClick} navbarRef={navbarRef} />
-        <div className="flex flex-col min-h-screen mt-24 bgStandard">
+        <div className="flex flex-col mt-24 bgStandard">
           {/* @TODO consider utility class className="container" */}
+
           {activeComponent === 'Governance' && <Governance />}
           {activeComponent === 'Create Asset' && <CreateAsset />}
           {activeComponent === 'Find Asset' && <FindAsset />}
-          {activeComponent === 'About' && <About />}
-          {activeComponent === 'Getting started' && <GettingStarted />}
+          {activeComponent === 'About' && <About onNavbarClick={handleNavbarClick} navbarRef={navbarRef} />}
+          {activeComponent === 'Getting started' && <GettingStarted navbarHeight={navbarHeight} />}
           {activeComponent === 'Docs' && <Docs />}
           {activeComponent === 'Help' && <Help />}
+
         </div>
       </WalletProvider>
       <Footer />
+
+
+
     </>
+
 
 
 
