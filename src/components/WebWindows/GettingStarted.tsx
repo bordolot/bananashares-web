@@ -330,10 +330,10 @@ const GettingStarted: React.FC<GettingStartedProps> = ({ navbarHeight }) => {
 
                         <div className="text-xl mb-2 text-justify">
                             <div className="mb-2">
-                                When a privileged shareholder creates a sell offer, the specified price includes the protocol fee.
+                                When a privileged shareholder creates a sell offer, the protocol fee is added to the specified selling price.
                             </div>
                             <div className="mb-2">
-                                When a normal user buys a share in the asset, the specified price includes both the privileged shareholders' fee and the protocol fee.
+                                When a normal user buys a share in the asset, they must specify both the number of shares they want to buy and the price at which they are willing to sell them in the same form. The privileged shareholders' fee and the protocol fee are added to the specified selling price.
                             </div>
                             <div className="mb-2">
                                 Both types of fees are passed on to the owners only during the share purchase process.
