@@ -54,11 +54,11 @@ export function ConnectButton() {
                 {userAddress === null ? <>Connect</> : <>{isNetwork ? <>Connected</> : <>Change chain</>}</>}
             </button>
 
-            <button
+            {/* <button
                 className='w-full py-2 px-6 bg-[#00df9a] rounded-xl text-black hover:bg-[#9ab5df] duration-500'
                 onClick={() => { onCheckButton() }}>
                 check
-            </button>
+            </button> */}
 
         </div>
     );

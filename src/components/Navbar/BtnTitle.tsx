@@ -60,14 +60,14 @@ export const TitleButton: React.FC<TitleButtonProps> = ({ onNavbarClick, whichSi
             {isDropdownOpen && (
                 <div
                     data-testid="TitleButton_Dropdown"
-                    className="absolute ml-10 top-full mt-2 w-48  bg-white border bg-opacity-100 border-gray-200 rounded-lg shadow-lg"
+                    className="absolute ml-5 top-full mt-2 w-48  bg-white border bg-opacity-100 border-gray-200 rounded-lg shadow-lg"
                     style={{ marginTop: "-1px" }} // Add spacing for buffer
                 >
                     <ul className="text-sm text-gray-700">
                         {itemsToRender.map((item) => (
                             <li
                                 key={item.id}
-                                className="px-4 py-2 hover:bg-gray-100 bg-opacity-100 hover:rounded-lg cursor-pointer"
+                                className="px-4 py-2 select-none hover:bg-gray-100 bg-opacity-100 hover:rounded-lg cursor-pointer"
                                 onClick={() => handleOptionClick(item.text)}
                             >
                                 {item.text}

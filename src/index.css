@@ -1,8 +1,7 @@
 @import "tailwindcss";
-/* @import "tailwindcss/preflight"; */
 
-/* @tailwind base; */
-/* @tailwind components; */
+@import "./css/docs.css";
+
 @tailwind utilities;
 
 

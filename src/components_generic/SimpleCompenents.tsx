@@ -81,7 +81,7 @@ export const StandardInsideBG = forwardRef<HTMLDivElement, StandardInsideBGProps
                     </div>
                 }
                 {!isMobile &&
-                    <div className="textStandardInAbout p-10 my-10 mx-30 rounded-lg shadow-2xl bg-gradient-to-t from-green-500 to-yellow-400">
+                    <div className="textStandardInAbout p-10 my-10 mx-30 rounded-lg shadow-2xl bg-gradient-to-t from-yellow-500 to-green-400">
                         {children}
                     </div>
                 }
@@ -91,3 +91,80 @@ export const StandardInsideBG = forwardRef<HTMLDivElement, StandardInsideBGProps
 );
 
 
+interface CodeBlockProps {
+    code: string;
+}
+
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
+    return (
+        <div className="bg-gray-100 px-5 rounded-lg shadow-md overflow-auto">
+            <pre className="whitespace-pre-wrap text-sm text-gray-800">
+                <code>{code}</code>
+            </pre>
+        </div>
+    );
+};
+
+
+
+interface Table3ColumnsProps {
+    dataTitles: string[];
+    data: Array<{ column1: string, column2: string, column3: string }>;
+}
+
+export const Table3Columns: React.FC<Table3ColumnsProps> = ({ data, dataTitles }) => {
+    return (
+        <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[0]}</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[1]}</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[2]}</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {data.map((row, index) => (
+                        <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column1}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column2}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-wrap">{row.column3}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+interface Table4ColumnsProps {
+    dataTitles: string[];
+    data: Array<{ column1: string, column2: string, column3: string, column4: string }>;
+}
+
+export const Table4Columns: React.FC<Table4ColumnsProps> = ({ data, dataTitles }) => {
+    return (
+        <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[0]}</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[1]}</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[2]}</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{dataTitles[3]}</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {data.map((row, index) => (
+                        <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column1}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column2}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column3}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.column4}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};

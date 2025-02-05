@@ -4,8 +4,8 @@ import SvgComponent from "./BananaLogo_base";
 const BananaLogo: React.FC = () => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="80px" /* Fixed width */
-        height="80px" /* Fixed height */
+        width="50px" /* Fixed width */
+        height="50px" /* Fixed height */
         // style={{
         //     display: 'block', /* Prevent unexpected resizing inside flex containers */
         // }}

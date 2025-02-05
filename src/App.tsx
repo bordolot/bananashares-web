@@ -50,7 +50,7 @@ function App() {
           {activeComponent === 'Find Asset' && <FindAsset />}
           {activeComponent === 'About' && <About onNavbarClick={handleNavbarClick} navbarRef={navbarRef} />}
           {activeComponent === 'Getting started' && <GettingStarted navbarHeight={navbarHeight} />}
-          {activeComponent === 'Docs' && <Docs />}
+          {activeComponent === 'Docs' && <Docs navbarHeight={navbarHeight} />}
           {activeComponent === 'Help' && <Help />}
 
         </div>

@@ -34,6 +34,7 @@ export function ModalCreateNewLicense({ keccak256String, setKeccak256String }: C
                 <div className="mr-3"></div>
                 <div className="textStandard">Upload your license:</div>
             </div>
+            <div className="mb-2"></div>
             <FileHasher
                 keccak256String={keccak256String}
                 setKeccak256String={setKeccak256String}

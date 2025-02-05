@@ -94,7 +94,7 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
         // <div className="p-6 min-h-screen">
         //     <div className="container mx-auto">
 
-        <div className="m-10">
+        <div className="m-10 min-h-100">
 
             <div className="textHeader">Connect to your asset</div>
             <form onSubmit={tryToConnectToAssetByAddress}>

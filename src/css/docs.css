@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+.docs-container {
+    display: flex;
+    flex-direction: row-reverse;
+    min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+    .docs-container {
+        flex-direction: row;
+    }
+}
+
+.docs-sidebar {
+    /* background-color: #c8fff6; */
+    background-color: #fbc600;
+    padding: 1rem;
+    position: sticky;
+    top: 6rem;
+    height: calc(100vh - 6rem);
+    overflow-y: auto;
+    overflow-x: auto;
+    width: 30%;
+}
+
+@media (min-width: 768px) {
+    .docs-sidebar {
+        width: 20%;
+    }
+}
+
+.docs-content {
+    padding: 1rem;
+    flex-grow: 1;
+    width: 70%;
+}
+
+@media (min-width: 768px) {
+    .docs-content {
+        width: 80%;
+    }
+}
+
+.footer {
+    background-color: #f7fafc;
+    padding: 1rem;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.docs_paragraf {
+    padding-left: 1rem;
+    text-align: justify;
+}

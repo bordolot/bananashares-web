@@ -1,6 +1,7 @@
 
-import { FaInstagram, } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+// import { FaInstagram, } from 'react-icons/fa';
+// import { FaXTwitter } from 'react-icons/fa6';
+import { FaDiscord } from 'react-icons/fa6';
 
 // const sections = [
 //     {
@@ -24,14 +25,14 @@ import { FaXTwitter } from 'react-icons/fa6';
 const items = [
     {
         name: 'Twitter',
-        icon: FaXTwitter,
+        icon: FaDiscord,
         link: 'https://x.com/S_M_place'
     },
-    {
-        name: 'Instagram',
-        icon: FaInstagram,
-        link: 'https://www.instagram.com/s_m_place/'
-    }
+    // {
+    //     name: 'Instagram',
+    //     icon: FaInstagram,
+    //     link: 'https://www.instagram.com/s_m_place/'
+    // }
 ]
 const Footer = () => {
     return (
@@ -43,7 +44,7 @@ const Footer = () => {
 
                     <div className='col-span-2 pt-8 md:pt-2'>
                         <p className='text-5xl w-full font-bold text-yellow-400 pb-5'>
-                            Banana Shares
+                            Bananashares
                         </p>
                         <div className='flex justify-between sm:w-[70px] pt-4 text-2xl'>
                             {items.map((x, index) => (
