@@ -5,7 +5,7 @@ import { CodeBlock, Table3Columns, Table4Columns } from "../../components_generi
 
 
 const intro = [
-    { id: "intro", title: "Inroduction", content: <div>This section explains all aspects of the Songs Marketplace. The documentation is divided into three parts: User Docs, How-To Guides, and Dev Docs. User Docs define all concepts associated with the Songs Marketplace. How-To Guides explain how to use the platform. Dev Docs thoroughly describe the backend of this dapp, focusing on the chosen blockchain technology and details of the smart contracts used in this protocol.</div> },
+    { id: "intro", title: "Inroduction", content: <div>This section explains all aspects of the Bananashares protocol. The documentation is divided into three parts: User Docs, How-To Guides, and Dev Docs. User Docs define all concepts associated with the Songs Marketplace. How-To Guides explain how to use the platform. Dev Docs thoroughly describe the backend of this dapp, focusing on the chosen blockchain technology and details of the smart contracts used in this protocol.</div> },
 ];
 
 const userDocs = [

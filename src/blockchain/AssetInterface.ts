@@ -1,7 +1,7 @@
 import { ethers } from "ethers"
 
 import { ContractInterface } from "./utilities/ContractInterface";
-import assetAbi from "./contracts/AssetAbi.json";
+import assetAbi from "./contracts/IAssetInstance.json";
 import { TxArgs_BuyShares, TxArgs_CancelOffer, TxArgs_ChangeOffer, TxArgs_MakeSellOffer, TxArgs_PayEarndFeesToAllPrivileged, TxArgs_Withdraw } from "../utility/Interfaces";
 import { TxArgs_PutNewLicense, TxArgs_ActivateLicense, TxArgs_SignLicense, TxArgs_PayDividend } from "../utility/Interfaces";
 import { Info_Asset, Info_License, Info_RegularOffer, Info_User, Info_UserOffer } from "../utility/Interfaces";
@@ -56,18 +56,18 @@ export class AssetInterface extends ContractInterface {
                 hash: ""
             };
 
-            newInfo.title = await this.contract.nameOfSong();
+            newInfo.title = await this.contract.getNameOfAsset();
             const result_1 = await this.contract.getAllAuthors()
             newInfo.names = result_1.map(([name]: [string, any]) => name);
             const result_2 = await this.contract.getAllPrivShareholders()
             newInfo.addresses = result_2.slice(1);
             let totalShares = TOTAL_SUPLY;
             for (let i = 0; i < newInfo.addresses.length; i++) {
-                newInfo.shares[i] = await this.contract.shares(newInfo.addresses[i])
+                newInfo.shares[i] = await this.contract.getShares(newInfo.addresses[i])
                 totalShares -= Number(newInfo.shares[i])
             }
             newInfo.theRestShares = totalShares
-            newInfo.hash = await this.contract.songHash()
+            newInfo.hash = await this.contract.getAssetHash()
             this.info_asset = newInfo;
             return { infoTaken: true }
 
@@ -122,9 +122,9 @@ export class AssetInterface extends ContractInterface {
                 ether: BigInt(0)
             }
 
-            const result_0 = await this.contract.shares(_userAddress)
+            const result_0 = await this.contract.getShares(_userAddress)
             if (Number(result_0) != 0) {
-                const result_1 = await this.contract.dividendToPay(_userAddress)
+                const result_1 = await this.contract.getDividendToPay(_userAddress)
                 newInfo.dividend = BigInt(result_1[0])
                 newInfo.howManyPayments = BigInt(result_1[1])
                 if (newInfo.howManyPayments > 0) {
@@ -136,7 +136,7 @@ export class AssetInterface extends ContractInterface {
                     newInfo.fees = result_2
                 }
             }
-            const result_3 = await this.contract.balances(_userAddress)
+            const result_3 = await this.contract.getBalance(_userAddress)
             if (result_3 > 0) {
                 newInfo.isThereAnyEther = true
                 newInfo.ether = result_3
@@ -162,7 +162,7 @@ export class AssetInterface extends ContractInterface {
                 amount: 0,
                 valuePerShare: 0
             }
-            const result_1 = await this.contract.offersIndex(_userAddress)
+            const result_1 = await this.contract.getOffersIndex(_userAddress)
             if (result_1 != 0) {
                 const result_2 = await this.contract.getOffer(result_1)
                 newOffer.amount = Number(result_2[4])
@@ -203,7 +203,7 @@ export class AssetInterface extends ContractInterface {
                     } else {
                         _isThereAnyFees = false;
                     }
-                    result_1_1 = await this.contract.dividendToPay(object[0]);
+                    result_1_1 = await this.contract.getDividendToPay(object[0]);
                     _howMany = result_1_1[1];
                     _isThereAnyDividend = false;
                     if (_howMany > 0) {

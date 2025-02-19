@@ -4,7 +4,7 @@ import { ethers } from "ethers"
 
 import { ContractInterface } from "./utilities/ContractInterface";
 import addresses from "./contracts/addresses.json";
-import createAssetAbi from "./contracts/CreateAssetAbi.json";
+import createAssetAbi from "./contracts/IAssetFactory.json";
 
 import { saveToFile } from "./utilities/commonMethods";
 import { GAS_LIMIT_IN_CREATE_ASSET } from "../utility/Globals";
@@ -30,7 +30,7 @@ export class AssetFactoryInterface extends ContractInterface {
     async checkAssetExist(_assetAddr: string): Promise<{ assetExist: boolean }> {
         if (!this.contract) return { assetExist: false }
         try {
-            const assetName = await this.contract.getSongByAddress(_assetAddr);
+            const assetName = await this.contract.getAssetInstanceHashByAddress(_assetAddr);
             if (assetName != "") {
                 return { assetExist: true }
             }
@@ -44,7 +44,7 @@ export class AssetFactoryInterface extends ContractInterface {
     async checkAssetExistByHash(_assetHash: string): Promise<{ assetExist: boolean, contractAddress: string }> {
         if (!this.contract) return { assetExist: false, contractAddress: "0x" }
         try {
-            const assetAddr = await this.contract.getSongByHash(_assetHash);
+            const assetAddr = await this.contract.getAssetInstanceByHash(_assetHash);
             if (assetAddr != "") {
                 return { assetExist: true, contractAddress: assetAddr }
             }

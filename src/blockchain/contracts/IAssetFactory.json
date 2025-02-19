@@ -1,0 +1,510 @@
+{
+    "abi": [
+        {
+            "type": "function",
+            "name": "createAssetInstance",
+            "inputs": [
+                {
+                    "name": "_nameOfAsset",
+                    "type": "string",
+                    "internalType": "string"
+                },
+                {
+                    "name": "_initialOwners",
+                    "type": "string[]",
+                    "internalType": "string[]"
+                },
+                {
+                    "name": "_shareholderAddress",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                },
+                {
+                    "name": "_shares",
+                    "type": "uint24[]",
+                    "internalType": "uint24[]"
+                },
+                {
+                    "name": "_assetHash",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "getAssetInstanceByHash",
+            "inputs": [
+                {
+                    "name": "_hash",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getAssetInstanceHashByAddress",
+            "inputs": [
+                {
+                    "name": "_address",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getAssetInstanceImplementation",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getAssetInstanceNumber",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getGlobalSettings",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "tuple",
+                    "internalType": "struct Asset_Structs.GlobalSettings",
+                    "components": [
+                        {
+                            "name": "commission_for_privileged",
+                            "type": "uint24",
+                            "internalType": "uint24"
+                        },
+                        {
+                            "name": "commission_for_protocol",
+                            "type": "uint24",
+                            "internalType": "uint24"
+                        },
+                        {
+                            "name": "min_sell_offer",
+                            "type": "uint96",
+                            "internalType": "uint96"
+                        }
+                    ]
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "sendTokenMintingOrder",
+            "inputs": [
+                {
+                    "name": "_tokenReceiver_1",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "_tokenReceiver_2",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "_numberOfAssetShares",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "_alreadyMinted",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "setAssetInstanceImplementation",
+            "inputs": [
+                {
+                    "name": "_implementation",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "withdraw",
+            "inputs": [],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "withdrawTo",
+            "inputs": [
+                {
+                    "name": "_addr",
+                    "type": "address",
+                    "internalType": "address payable"
+                },
+                {
+                    "name": "_amount",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        }
+    ],
+    "bytecode": {
+        "object": "0x",
+        "sourceMap": "",
+        "linkReferences": {}
+    },
+    "deployedBytecode": {
+        "object": "0x",
+        "sourceMap": "",
+        "linkReferences": {}
+    },
+    "methodIdentifiers": {
+        "createAssetInstance(string,string[],address[],uint24[],bytes32)": "65e0af5b",
+        "getAssetInstanceByHash(bytes32)": "f2d2d2fe",
+        "getAssetInstanceHashByAddress(address)": "02eaabca",
+        "getAssetInstanceImplementation()": "e7addf70",
+        "getAssetInstanceNumber()": "559dff30",
+        "getGlobalSettings()": "8cf515f4",
+        "sendTokenMintingOrder(address,address,uint256,uint256)": "0a0d3fff",
+        "setAssetInstanceImplementation(address)": "ed709051",
+        "withdraw()": "3ccfd60b",
+        "withdrawTo(address,uint256)": "205c2878"
+    },
+    "rawMetadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_nameOfAsset\",\"type\":\"string\"},{\"internalType\":\"string[]\",\"name\":\"_initialOwners\",\"type\":\"string[]\"},{\"internalType\":\"address[]\",\"name\":\"_shareholderAddress\",\"type\":\"address[]\"},{\"internalType\":\"uint24[]\",\"name\":\"_shares\",\"type\":\"uint24[]\"},{\"internalType\":\"bytes32\",\"name\":\"_assetHash\",\"type\":\"bytes32\"}],\"name\":\"createAssetInstance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_hash\",\"type\":\"bytes32\"}],\"name\":\"getAssetInstanceByHash\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_address\",\"type\":\"address\"}],\"name\":\"getAssetInstanceHashByAddress\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAssetInstanceImplementation\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAssetInstanceNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGlobalSettings\",\"outputs\":[{\"components\":[{\"internalType\":\"uint24\",\"name\":\"commission_for_privileged\",\"type\":\"uint24\"},{\"internalType\":\"uint24\",\"name\":\"commission_for_protocol\",\"type\":\"uint24\"},{\"internalType\":\"uint96\",\"name\":\"min_sell_offer\",\"type\":\"uint96\"}],\"internalType\":\"struct Asset_Structs.GlobalSettings\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_tokenReceiver_1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_tokenReceiver_2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_numberOfAssetShares\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_alreadyMinted\",\"type\":\"uint256\"}],\"name\":\"sendTokenMintingOrder\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_implementation\",\"type\":\"address\"}],\"name\":\"setAssetInstanceImplementation\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_addr\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"withdrawTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/core/util/IAssetFactory.sol\":\"IAssetFactory\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\"]},\"sources\":{\"src/core/util/AssetInstanceStructs.sol\":{\"keccak256\":\"0x84f248015403fe96fe6078060bcc2063f4e2100b25f4ae95c9fbf0e21cf7d3cd\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://c5c7b333c6f146ed698abba6685154c0aa351eaa89a79bb10fcef3d80d3eb583\",\"dweb:/ipfs/QmcW1J7JiVE6W9sCUXTBCrzCwTQtccNZrcusaNt2Kj7Ztr\"]},\"src/core/util/IAssetFactory.sol\":{\"keccak256\":\"0xf2de72203438bdcc6191d166d408c3df0d41bd9bb109f5def15b0067ec9e35fc\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://429b567aa976a0acc4e11b46b13ba9d3904e52956db26c829fdeef653a17a335\",\"dweb:/ipfs/QmXTFMfSj79grScWXQSNvaozVYK5QV8xuvw7Wj6VQicQ14\"]},\"src/core/util/IAssetFactory_read.sol\":{\"keccak256\":\"0x996d56e5c8c5663f4063d030ff0f0915e3825bcb841727a6b0053925c24acc6d\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://8b7c69a086cc32efab8d9974f9a7b0c616f5b4f86ef161ef0f784feab4d56c39\",\"dweb:/ipfs/QmdjikjQHLaXtgnS7N1eVJddMpjP7oAX1MbLTJYghoCy6k\"]},\"src/core/util/IAssetFactory_write.sol\":{\"keccak256\":\"0x3cb72a1e1e22efccf0d59e63a5311841e363236efe37099f4b5c2763bd3a1eea\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://4a581497ca7298316670778c89c7ad3c7e4aeff869d7f9514b93b2a753ee7d44\",\"dweb:/ipfs/QmSbBiai5aVkSjtxsy4zs6qxK8agTR7Y1V9Cvo3szUeWAZ\"]}},\"version\":1}",
+    "metadata": {
+        "compiler": {
+            "version": "0.8.23+commit.f704f362"
+        },
+        "language": "Solidity",
+        "output": {
+            "abi": [
+                {
+                    "inputs": [
+                        {
+                            "internalType": "string",
+                            "name": "_nameOfAsset",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string[]",
+                            "name": "_initialOwners",
+                            "type": "string[]"
+                        },
+                        {
+                            "internalType": "address[]",
+                            "name": "_shareholderAddress",
+                            "type": "address[]"
+                        },
+                        {
+                            "internalType": "uint24[]",
+                            "name": "_shares",
+                            "type": "uint24[]"
+                        },
+                        {
+                            "internalType": "bytes32",
+                            "name": "_assetHash",
+                            "type": "bytes32"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "createAssetInstance"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "bytes32",
+                            "name": "_hash",
+                            "type": "bytes32"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "getAssetInstanceByHash",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_address",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "getAssetInstanceHashByAddress",
+                    "outputs": [
+                        {
+                            "internalType": "bytes32",
+                            "name": "",
+                            "type": "bytes32"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "getAssetInstanceImplementation",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "getAssetInstanceNumber",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "getGlobalSettings",
+                    "outputs": [
+                        {
+                            "internalType": "struct Asset_Structs.GlobalSettings",
+                            "name": "",
+                            "type": "tuple",
+                            "components": [
+                                {
+                                    "internalType": "uint24",
+                                    "name": "commission_for_privileged",
+                                    "type": "uint24"
+                                },
+                                {
+                                    "internalType": "uint24",
+                                    "name": "commission_for_protocol",
+                                    "type": "uint24"
+                                },
+                                {
+                                    "internalType": "uint96",
+                                    "name": "min_sell_offer",
+                                    "type": "uint96"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_tokenReceiver_1",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "_tokenReceiver_2",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "_numberOfAssetShares",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "_alreadyMinted",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "sendTokenMintingOrder",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_implementation",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "setAssetInstanceImplementation"
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "withdraw"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address payable",
+                            "name": "_addr",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "_amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "withdrawTo"
+                }
+            ],
+            "devdoc": {
+                "kind": "dev",
+                "methods": {},
+                "version": 1
+            },
+            "userdoc": {
+                "kind": "user",
+                "methods": {},
+                "version": 1
+            }
+        },
+        "settings": {
+            "remappings": [
+                "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+                "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+                "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+                "forge-std/=lib/forge-std/src/",
+                "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+                "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+                "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+            ],
+            "optimizer": {
+                "enabled": true,
+                "runs": 200
+            },
+            "metadata": {
+                "bytecodeHash": "ipfs"
+            },
+            "compilationTarget": {
+                "src/core/util/IAssetFactory.sol": "IAssetFactory"
+            },
+            "evmVersion": "shanghai",
+            "libraries": {}
+        },
+        "sources": {
+            "src/core/util/AssetInstanceStructs.sol": {
+                "keccak256": "0x84f248015403fe96fe6078060bcc2063f4e2100b25f4ae95c9fbf0e21cf7d3cd",
+                "urls": [
+                    "bzz-raw://c5c7b333c6f146ed698abba6685154c0aa351eaa89a79bb10fcef3d80d3eb583",
+                    "dweb:/ipfs/QmcW1J7JiVE6W9sCUXTBCrzCwTQtccNZrcusaNt2Kj7Ztr"
+                ],
+                "license": "BUSL-1.1"
+            },
+            "src/core/util/IAssetFactory.sol": {
+                "keccak256": "0xf2de72203438bdcc6191d166d408c3df0d41bd9bb109f5def15b0067ec9e35fc",
+                "urls": [
+                    "bzz-raw://429b567aa976a0acc4e11b46b13ba9d3904e52956db26c829fdeef653a17a335",
+                    "dweb:/ipfs/QmXTFMfSj79grScWXQSNvaozVYK5QV8xuvw7Wj6VQicQ14"
+                ],
+                "license": "BUSL-1.1"
+            },
+            "src/core/util/IAssetFactory_read.sol": {
+                "keccak256": "0x996d56e5c8c5663f4063d030ff0f0915e3825bcb841727a6b0053925c24acc6d",
+                "urls": [
+                    "bzz-raw://8b7c69a086cc32efab8d9974f9a7b0c616f5b4f86ef161ef0f784feab4d56c39",
+                    "dweb:/ipfs/QmdjikjQHLaXtgnS7N1eVJddMpjP7oAX1MbLTJYghoCy6k"
+                ],
+                "license": "BUSL-1.1"
+            },
+            "src/core/util/IAssetFactory_write.sol": {
+                "keccak256": "0x3cb72a1e1e22efccf0d59e63a5311841e363236efe37099f4b5c2763bd3a1eea",
+                "urls": [
+                    "bzz-raw://4a581497ca7298316670778c89c7ad3c7e4aeff869d7f9514b93b2a753ee7d44",
+                    "dweb:/ipfs/QmSbBiai5aVkSjtxsy4zs6qxK8agTR7Y1V9Cvo3szUeWAZ"
+                ],
+                "license": "BUSL-1.1"
+            }
+        },
+        "version": 1
+    },
+    "id": 105
+}
