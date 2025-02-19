@@ -1,7 +1,9 @@
 import React from "react";
 import { CodeBlock, Table3Columns, Table4Columns } from "../../components_generic/SimpleCompenents";
 
-
+import Logo from "../../assets/Docs/architecture.svg?react";
+// import { ReactComponent as Logo } from "../../assets/Docs/architecture.svg";
+// import Logo from "../../assets/Docs/architecture.svg?react";
 
 
 const intro = [
@@ -926,6 +928,8 @@ const Docs: React.FC<DocsProps> = ({ navbarHeight }) => {
             <main className="docs-content">
                 <div>
                     <h3 className="text-3xl font-bold mb-4">Inroduction</h3>
+                    <Logo />
+                    {/* <Logo className="w-32 h-32 fill-current text-blue-500" /> */}
                     {intro.map(section => (
                         <section id={section.id} key={section.id} className="mb-8">
                             {/* <h2 className="text-xl font-bold mb-4">{section.title}</h2> */}
