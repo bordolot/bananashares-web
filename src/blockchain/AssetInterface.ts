@@ -1,7 +1,8 @@
 import { ethers } from "ethers"
 
 import { ContractInterface } from "./utilities/ContractInterface";
-import assetAbi from "./contracts/IAssetInstance.json";
+// import assetAbi from "./contracts/IAssetInstance.json";
+import assetAbi from "./contracts/AssetInstance.json";
 import { TxArgs_BuyShares, TxArgs_CancelOffer, TxArgs_ChangeOffer, TxArgs_MakeSellOffer, TxArgs_PayEarndFeesToAllPrivileged, TxArgs_Withdraw } from "../utility/Interfaces";
 import { TxArgs_PutNewLicense, TxArgs_ActivateLicense, TxArgs_SignLicense, TxArgs_PayDividend } from "../utility/Interfaces";
 import { Info_Asset, Info_License, Info_RegularOffer, Info_User, Info_UserOffer } from "../utility/Interfaces";

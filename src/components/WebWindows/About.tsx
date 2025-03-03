@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StandardBG, StandardInsideBG } from "../../components_generic/SimpleCompenents";
 import { ButtonStandardArrowRight } from "../../components_generic/Button";
 import { dropdownItems } from "../Navbar/NavbarItems";

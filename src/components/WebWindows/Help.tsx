@@ -1,6 +1,6 @@
 import React from "react";
 import { StandardBG, StandardInsideBG } from "../../components_generic/SimpleCompenents";
-import EmailForm from "../../components_generic/EmailForm";
+// import EmailForm from "../../components_generic/EmailForm";
 
 interface HelpProps { }
 

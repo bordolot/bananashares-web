@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Offer } from "./Offer";
-import { ButtonStandard, ButtonStandardToWallet } from "../../../../components_generic/Button";
+import { ButtonStandardToWallet } from "../../../../components_generic/Button";
 import ModalContent from "../../../Modals/Modal";
 import Form from "../../../../components_generic/Form";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";

@@ -4,7 +4,8 @@ import { ethers } from "ethers"
 
 import { ContractInterface } from "./utilities/ContractInterface";
 import addresses from "./contracts/addresses.json";
-import createAssetAbi from "./contracts/IAssetFactory.json";
+// import createAssetAbi from "./contracts/IAssetFactory.json";
+import createAssetAbi from "./contracts/AssetFactory.json";
 
 import { saveToFile } from "./utilities/commonMethods";
 import { GAS_LIMIT_IN_CREATE_ASSET } from "../utility/Globals";
@@ -21,7 +22,7 @@ export class AssetFactoryInterface extends ContractInterface {
         this.walletOwnerAddress = _walletOwnerAddress;
 
         if (this.contract !== undefined) {
-            this._intializeSongsMarketplaceListeners(this.contract);
+            this._intializeAssetFactoryListeners(this.contract);
         }
         console.log("AssetFactoryInterface instance CREATED");
     }
@@ -30,8 +31,8 @@ export class AssetFactoryInterface extends ContractInterface {
     async checkAssetExist(_assetAddr: string): Promise<{ assetExist: boolean }> {
         if (!this.contract) return { assetExist: false }
         try {
-            const assetName = await this.contract.getAssetInstanceHashByAddress(_assetAddr);
-            if (assetName != "") {
+            const assetHash = await this.contract.getAssetInstanceHashByAddress(_assetAddr);
+            if (assetHash != 0) {
                 return { assetExist: true }
             }
             return { assetExist: false }
@@ -75,34 +76,37 @@ export class AssetFactoryInterface extends ContractInterface {
         });
     }
 
-    private _intializeSongsMarketplaceListeners(_contract: ethers.Contract) {
+    private _intializeAssetFactoryListeners(_contract: ethers.Contract) {
 
-        _contract.on("SongCreated", (songCreator, songAddress, nameOfSong, event) => {
+
+        _contract.on("AssetInstanceCreated", (assetCreator, assetAddress, nameOfAsset, event) => {
+
             event;
             // @TODO add any info or allert with this info for users
             // console.log(`Song Created!!!!`);
-            // console.log(`Song name => ${nameOfSong}`);
-            // console.log(`Song address => ${songAddress}`);
-            // console.log(`Song songCreator => ${songCreator}`);
+            // console.log(`Song name => ${nameOfAsset}`);
+            // console.log(`Song address => ${assetAddress}`);
+            // console.log(`Song assetCreator => ${assetCreator}`);
             if (this.walletOwnerAddress) {
-                if (this.walletOwnerAddress.toLowerCase() == songCreator.toLowerCase()) {
+                if (this.walletOwnerAddress.toLowerCase() == assetCreator.toLowerCase()) {
 
 
-                    const content = `Song address: ${songAddress}`
-                    saveToFile(`${nameOfSong}_address.txt`, content)
+                    const content = `Song address: ${assetAddress}`
+                    saveToFile(`${nameOfAsset}_address.txt`, content)
+
 
                     this.shouldShowAssetCreatedModal = true;
-                    this.newAssetAddress = songAddress;
+                    this.newAssetAddress = assetAddress;
                     this.callTheOwner();
                 }
             }
 
         })
 
-        _contract.on("ContractCreationFailure", (songCreator, reason, event) => {
+        _contract.on("AssetInstanceCreationFailure", (assetCreator, reason, event) => {
             event;
-            console.log(`Song ContractCreationFailure!!!!`);
-            console.log(`Song songCreator => ${songCreator}`);
+            console.log(`Song AssetInstanceCreationFailure!!!!`);
+            console.log(`Song assetCreator => ${assetCreator}`);
             console.log(`Song reason => ${reason}`);
         })
 

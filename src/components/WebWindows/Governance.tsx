@@ -2,6 +2,8 @@ import React from "react";
 import { StandardBG, StandardInsideBG } from "../../components_generic/SimpleCompenents";
 import { getCurrentPhase } from "./About";
 
+import coinVideo from "../../assets/coin.mp4";
+
 interface GovernanceProps { }
 
 const Governance: React.FC<GovernanceProps> = () => (
@@ -41,7 +43,8 @@ const AutoPlayVideo: React.FC = () => {
                 playsInline // Important for mobile devices
                 style={{ borderRadius: "20px" }}
             >
-                <source src="../../../public/coin.mp4" type="video/mp4" />
+                {/* <source src="../../../public/coin.mp4" type="video/mp4" /> */}
+                <source src={coinVideo} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
         </div>

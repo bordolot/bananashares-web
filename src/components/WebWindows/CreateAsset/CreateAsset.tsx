@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import ConnectWallet from "../../Utilities/ConnectWallet";
 import NoWalletDetected from "../../Utilities/NoWallet";
-import Spinner from "../../Utilities/Spinner";
+// import Spinner from "../../Utilities/Spinner";
 import ModalContent from "../../Modals/Modal";
 import { useWallet } from "../../../blockchain/WalletInterface";
 import { TokenizeAsset } from "./TokenizeAsset";
@@ -28,6 +28,8 @@ export const CreateAsset: React.FC<CreateAssetProps> = () => {
     // Simulate checking wallet connection and loading state
     useEffect(() => {
         setTimeout(() => {
+            //todo delete it
+            loading;
             setLoading(false);
         }, SPINNER_DURATION);
     }, []);

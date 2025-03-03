@@ -4,7 +4,7 @@ import InteractWithAsset from "./InteractWithAsset";
 
 import ConnectWallet from "../../Utilities/ConnectWallet";
 import NoWalletDetected from "../../Utilities/NoWallet";
-import Spinner from "../../Utilities/Spinner";
+// import Spinner from "../../Utilities/Spinner";
 import { SPINNER_DURATION } from "../../../utility/Globals";
 import { ButtonStandardArrowRight } from "../../../components_generic/Button";
 import { useWallet } from "../../../blockchain/WalletInterface";
@@ -18,6 +18,8 @@ const FindAsset: React.FC = () => {
 
     useEffect(() => {
         setTimeout(() => {
+            //todo delete it
+            loading;
             setLoading(false);
         }, SPINNER_DURATION);
     }, []);

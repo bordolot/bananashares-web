@@ -5,7 +5,7 @@ import { ALLERT_INFO_WALLET_WATINNG, ALLERT_ON_ERROR_NO_METAMASK, ALLERT_ON_ERRO
 
 export function ConnectButton() {
     const [isConnecting, setIsConnecting] = useState(false);
-    const { connectWallet, provider, userAddress, isNetwork, assetFactoryInterface, reload } = useWallet();
+    const { connectWallet, userAddress, isNetwork } = useWallet();
 
     const onConnectButton = async () => {
         if (isConnecting) {
@@ -30,19 +30,19 @@ export function ConnectButton() {
         }
     };
 
-    const onCheckButton = () => {
-        console.log("onCheckButton");
-        // reload();
-        // initCreateAssetInterface();
-        // console.log("accountsChanged assetFactoryInterface ", assetFactoryInterface.current?.newAssetAddress)
-        // console.log(provider);
-        // console.log("userAddress:", userAddress);
-        // console.log("isNetwork: ", isNetwork);
-        // console.log("assetFactoryInterface?.shouldShowAssetCreated: ", assetFactoryInterface?.shouldShowAssetCreated);
+    // const onCheckButton = () => {
+    //     console.log("onCheckButton");
+    // reload();
+    // initCreateAssetInterface();
+    // console.log("accountsChanged assetFactoryInterface ", assetFactoryInterface.current?.newAssetAddress)
+    // console.log(provider);
+    // console.log("userAddress:", userAddress);
+    // console.log("isNetwork: ", isNetwork);
+    // console.log("assetFactoryInterface?.shouldShowAssetCreated: ", assetFactoryInterface?.shouldShowAssetCreated);
 
-        console.log("onCheckButton - END");
+    //     console.log("onCheckButton - END");
 
-    };
+    // };
 
     return (
         <div className="mx-auto my-auto">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 // import { ButtonStandard } from "../../../../components_generic/Button";
 import { WEI_IN_ETHER, TOTAL_SUPLY, BIPS } from "../../../../utility/Globals";
 import { TitleValueInOneLine, ValueUnit } from "../../../../components_generic/SimpleCompenents";
@@ -67,7 +67,7 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
 
     const { assetInterface } = useWallet();
 
-    const handlePayFees = (offer: Info_RegularOffer) => async () => {
+    const handlePayFees = () => async () => {
         try {
             if (!assetInterface.current) {
                 throw Error("There was a problem with Asset contract interface.");
@@ -134,7 +134,7 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
                                     {offer.isThereAnyFees && (
                                         <div className="flex">
                                             <InfoRevealer explanation={<div>To buy shares from this user, you need to collect their fees for them.</div>} width={70} />
-                                            <ButtonStandardToWallet buttonName={"Pay fees"} handleClick={handlePayFees(offer)} />
+                                            <ButtonStandardToWallet buttonName={"Pay fees"} handleClick={handlePayFees()} />
                                         </div>
                                     )}
                                     {!offer.isThereAnyDividend && !offer.isThereAnyFees && (

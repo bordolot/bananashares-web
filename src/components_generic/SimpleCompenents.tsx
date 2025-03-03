@@ -76,12 +76,12 @@ export const StandardInsideBG = forwardRef<HTMLDivElement, StandardInsideBGProps
         return (
             <div ref={ref}>
                 {isMobile &&
-                    <div className="textStandardInAbout p-10 my-10 mx-10 rounded-lg shadow-2xl bg-gradient-to-t from-green-500 to-yellow-400">
+                    <div className="textStandardInAbout p-10 my-10 mx-10 rounded-lg shadow-2xl bg-gradient-to-t from-yellow-300 to-lime-300">
                         {children}
                     </div>
                 }
                 {!isMobile &&
-                    <div className="textStandardInAbout p-10 my-10 mx-30 rounded-lg shadow-2xl bg-gradient-to-t from-yellow-500 to-green-400">
+                    <div className="textStandardInAbout p-10 my-10 mx-30 rounded-lg shadow-2xl bg-gradient-to-t from-yellow-300 to-lime-300">
                         {children}
                     </div>
                 }
