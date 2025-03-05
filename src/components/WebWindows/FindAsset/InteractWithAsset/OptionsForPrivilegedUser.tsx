@@ -7,16 +7,15 @@ import { ModalSellShares } from "../../../Modals/ModalSellShares";
 import { WEI_IN_ETHER } from "../../../../utility/Globals";
 import { useWallet } from "../../../../blockchain/WalletInterface";
 import { TxArgs_MakeSellOffer, TxArgs_PayDividend, TxArgs_PayEarndFeesToAllPrivileged, TxArgs_Withdraw } from "../../../../utility/Interfaces";
-import { getSharesFromSongInfo } from "../../../../blockchain/utilities/commonMethods";
+import { checkIfEtherIsLocked, getLockPeriod, getSharesFromSongInfo, getNumberOfGovTokensToMintInAsset } from "../../../../blockchain/utilities/commonMethods";
 import { TitleValueInOneLine, ValueUnit } from "../../../../components_generic/SimpleCompenents";
 import InfoRevealer from "../../../../components_generic/InfoRevealer";
 
 
 export const OptionsForPrivilegedUser: React.FC = () => {
-    const { assetInterface, userAddress } = useWallet();
+    const { assetInterface, userAddress, assetFactoryInterface, tokenInterface } = useWallet();
 
     const [shouldShowSellOffer, setShouldShowSellOffer] = useState(false);
-
 
 
     async function payDividend() {
@@ -116,6 +115,12 @@ export const OptionsForPrivilegedUser: React.FC = () => {
 
     }
 
+    if (!assetFactoryInterface.current) {
+        return (<>No Asset Factory Interface!!!</>)
+    }
+    if (!tokenInterface.current) {
+        return (<>No Token Interface!!!</>)
+    }
     if (!assetInterface.current) {
         return (<>No Asset Interface!!!</>)
     }
@@ -137,7 +142,19 @@ export const OptionsForPrivilegedUser: React.FC = () => {
                 <Form
                     submitName="Send transaction"
                     handleSubmit={makeSellOffer}>
-                    <ModalSellShares numberOfShares={getSharesFromSongInfo(assetInterface.current.info_user.userAddress, assetInterface.current.info_asset)} />
+                    <ModalSellShares
+                        numberOfShares={
+                            getSharesFromSongInfo(
+                                assetInterface.current.info_user.userAddress,
+                                assetInterface.current.info_asset)}
+                        govTokensData={
+                            getNumberOfGovTokensToMintInAsset(
+                                Number(assetFactoryInterface.current.currentBlockNr),
+                                Number(assetFactoryInterface.current.protocolDeploymentBlockNr),
+                                Number(tokenInterface.current.availableToMint),
+                                Number(assetInterface.current.info_asset.govTokensMinted))
+                        }
+                    />
                 </Form>
             </ModalContent>
         )}
@@ -187,11 +204,9 @@ export const OptionsForPrivilegedUser: React.FC = () => {
                         buttonName="Collect" />
                 </div>
 
-
-
-
-
-                : <></>}
+                :
+                <></>
+            }
 
             {assetInterface.current.info_user.isThereAnyFees ?
                 <div className="bgOffer p-3 rounded-2xl h-full">
@@ -212,21 +227,54 @@ export const OptionsForPrivilegedUser: React.FC = () => {
 
             {assetInterface.current.info_user.isThereAnyEther ?
 
-                <div className="bgOffer p-3 rounded-2xl h-full">
-                    <div className="textStandard">You can withdraw ether.</div>
-                    <TitleValueInOneLine
-                        title="Amount:"
-                        distanse={"mr-2"}
-                        value={
-                            <div className="flex">
-                                <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.ether)} unit={"WEI"} />} />
-                                {(Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER).toFixed(5)} ETH
-                            </div>} />
-                    <ButtonStandardToWallet
-                        handleClick={payEther}
-                        buttonName="Withdraw" />
-                </div>
+                (
+                    checkIfEtherIsLocked(
+                        Number(assetFactoryInterface.current.currentBlockNr),
+                        Number(assetInterface.current.info_user.lastBlockGovTokenMinted)
+                    )
+                        ?
+                        <div className="bgOffer p-3 rounded-2xl h-full">
+                            <div className="textStandard">You have ether to withdraw.</div>
+                            <TitleValueInOneLine
+                                title="Amount:"
+                                distanse={"mr-2"}
+                                value={
+                                    <div className="flex">
+                                        <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.ether)} unit={"WEI"} />} />
+                                        {(Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER).toFixed(5)} ETH
+                                    </div>} />
 
+                            <div className="textStandard">Because you were minted Bananashares tokens,</div>
+                            <div className="textStandard">you need to wait for the lock period before you are allowed to withdraw.</div>
+                            <TitleValueInOneLine
+                                title="Lock period:"
+                                distanse={"mr-2"}
+                                value={
+                                    <div className="flex">
+                                        {getLockPeriod(
+                                            Number(assetFactoryInterface.current.currentBlockNr),
+                                            Number(assetInterface.current.info_user.lastBlockGovTokenMinted)
+                                        )} days
+                                    </div>} />
+
+
+                        </div>
+                        :
+                        <div className="bgOffer p-3 rounded-2xl h-full">
+                            <div className="textStandard">You can withdraw ether.</div>
+                            <TitleValueInOneLine
+                                title="Amount:"
+                                distanse={"mr-2"}
+                                value={
+                                    <div className="flex">
+                                        <InfoRevealer explanation={<ValueUnit value={Number(assetInterface.current.info_user.ether)} unit={"WEI"} />} />
+                                        {(Number(assetInterface.current.info_user.ether) / WEI_IN_ETHER).toFixed(5)} ETH
+                                    </div>} />
+                            <ButtonStandardToWallet
+                                handleClick={payEther}
+                                buttonName="Withdraw" />
+                        </div>
+                )
 
 
                 : <></>}

@@ -6,6 +6,7 @@ import InfoRevealer from "../../../../components_generic/InfoRevealer";
 import { ButtonStandard, ButtonStandardToWallet } from "../../../../components_generic/Button";
 import { useWallet } from "../../../../blockchain/WalletInterface";
 import { Info_RegularOffer, TxArgs_CancelOffer, TxArgs_PayDividend, TxArgs_PayEarndFeesToAllPrivileged } from "../../../../utility/Interfaces";
+import { checkIfUserIsPrivileged, getNumberOfGovTokensToMintInAsset } from "../../../../blockchain/utilities/commonMethods";
 
 interface OfferProps {
     from: string | undefined | null;
@@ -65,7 +66,7 @@ interface InAllOfferProps {
 
 export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }) => {
 
-    const { assetInterface } = useWallet();
+    const { assetInterface, assetFactoryInterface, tokenInterface } = useWallet();
 
     const handlePayFees = () => async () => {
         try {
@@ -96,10 +97,59 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
         }
     };
 
+    const getNumberOfGovTokensToMint = (_numberOfSharesInOffer: number): number => {
+        let _valueToMint_forRegular;
+        // let _valueToMint_forPrivileged;
+        if (!assetFactoryInterface.current) {
+            return 0;
+        }
+        if (!tokenInterface.current) {
+            return 0;
+        }
+        if (!assetInterface.current) {
+            return 0;
+        }
+        if (!assetInterface.current.info_asset) {
+            return 0;
+        }
+        const _govTokensData: [number, number] = getNumberOfGovTokensToMintInAsset(
+            Number(assetFactoryInterface.current.currentBlockNr),
+            Number(assetFactoryInterface.current.protocolDeploymentBlockNr),
+            Number(tokenInterface.current.availableToMint),
+            Number(assetInterface.current.info_asset.govTokensMinted))
+        const _govTokensToMint: number = _govTokensData[0];
+        const _tokensDivisor: number = _govTokensData[1];
+        let _numberOfTokensToMint = Math.floor(_numberOfSharesInOffer / _tokensDivisor);
+        if (_govTokensToMint < 2) {
+            return 0;
+        }
+        if (tokenInterface.current.availableToMint == 1) {
+            return 1;
+        }
+        if (_numberOfTokensToMint < 2) {
+            return 0;
+        }
+
+        if (_numberOfTokensToMint > _govTokensToMint) {
+            _numberOfTokensToMint = _govTokensToMint;
+        }
+
+        _valueToMint_forRegular = Math.floor(_numberOfTokensToMint / 2);
+        // _valueToMint_forPrivileged = _numberOfTokensToMint - _valueToMint_forRegular;
+
+        return _valueToMint_forRegular;
+    }
+
 
 
     if (!offer.addressFrom && !offer.amount && !offer.valuePerShare) {
         return (<>Empty Offer!</>);
+    }
+    if (!assetInterface.current) {
+        return (<>Empty Asset!</>);
+    }
+    if (!assetInterface.current.info_asset) {
+        return (<>Empty Asset!</>);
     }
     return (
         <div className="flex">
@@ -124,7 +174,7 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
                                     (<>To buy shares collect your fees.</>)
                                 )
                                 :
-                                (<>
+                                (<div>
                                     {offer.isThereAnyDividend && (
                                         <div className="flex">
                                             <InfoRevealer explanation={<div>To buy shares from this user, you need to collect their dividend for them.<br /> There {offer.howManyPayments == 1 ? "is" : "are"} {offer.howManyPayments} payments to collect.</div>} width={70} />
@@ -140,7 +190,19 @@ export const InAllOffer: React.FC<InAllOfferProps> = ({ offer, handleBuyShares }
                                     {!offer.isThereAnyDividend && !offer.isThereAnyFees && (
                                         <ButtonStandard buttonName={"Buy shares"} handleClick={handleBuyShares(offer)} />
                                     )}
-                                </>)
+
+                                    {checkIfUserIsPrivileged(offer.addressFrom, assetInterface.current.info_asset) &&
+                                        getNumberOfGovTokensToMint(offer.amount) > 0 &&
+                                        <TitleValueInOneLine
+                                            title="You can mint:"
+                                            distanse={"mr-2"}
+                                            value={
+                                                <div className="flex">
+                                                    {getNumberOfGovTokensToMint(offer.amount)} Bananashares tokens
+                                                </div>} />
+                                    }
+
+                                </div>)
 
 
                         )

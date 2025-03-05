@@ -54,22 +54,24 @@ export class AssetInterface extends ContractInterface {
                 addresses: [],
                 shares: [],
                 theRestShares: 0,
-                hash: ""
+                hash: "",
+                govTokensMinted: 0
             };
 
             newInfo.title = await this.contract.getNameOfAsset();
-            const result_1 = await this.contract.getAllAuthors()
+            const result_1 = await this.contract.getAllAuthors();
             newInfo.names = result_1.map(([name]: [string, any]) => name);
-            const result_2 = await this.contract.getAllPrivShareholders()
+            const result_2 = await this.contract.getAllPrivShareholders();
             newInfo.addresses = result_2.slice(1);
             let totalShares = TOTAL_SUPLY;
             for (let i = 0; i < newInfo.addresses.length; i++) {
-                newInfo.shares[i] = await this.contract.getShares(newInfo.addresses[i])
-                totalShares -= Number(newInfo.shares[i])
+                newInfo.shares[i] = await this.contract.getShares(newInfo.addresses[i]);
+                totalShares -= Number(newInfo.shares[i]);
             }
-            newInfo.theRestShares = totalShares
-            newInfo.hash = await this.contract.getAssetHash()
+            newInfo.theRestShares = totalShares;
+            newInfo.hash = await this.contract.getAssetHash();
             this.info_asset = newInfo;
+            newInfo.govTokensMinted = Number(await this.contract.getGovTokensMinted());
             return { infoTaken: true }
 
         } catch (error: any) {
@@ -120,27 +122,30 @@ export class AssetInterface extends ContractInterface {
                 isThereAnyFees: false,
                 fees: BigInt(0),
                 isThereAnyEther: false,
-                ether: BigInt(0)
+                ether: BigInt(0),
+                lastBlockGovTokenMinted: BigInt(0)
             }
 
             const result_0 = await this.contract.getShares(_userAddress)
             if (Number(result_0) != 0) {
-                const result_1 = await this.contract.getDividendToPay(_userAddress)
-                newInfo.dividend = BigInt(result_1[0])
-                newInfo.howManyPayments = BigInt(result_1[1])
+                const result_1 = await this.contract.getDividendToPay(_userAddress);
+                newInfo.dividend = BigInt(result_1[0]);
+                newInfo.howManyPayments = BigInt(result_1[1]);
                 if (newInfo.howManyPayments > 0) {
-                    newInfo.isThereAnyDividend = true
+                    newInfo.isThereAnyDividend = true;
                 }
                 const result_2 = BigInt(await this.contract.getPrivilegedFees(_userAddress))
                 if (result_2 > 0) {
-                    newInfo.isThereAnyFees = true
-                    newInfo.fees = result_2
+                    newInfo.isThereAnyFees = true;
+                    newInfo.fees = result_2;
                 }
             }
-            const result_3 = await this.contract.getBalance(_userAddress)
+            const result_3 = await this.contract.getBalance(_userAddress);
+            const result_4 = await this.contract.getLastBlockGovTokenMinted(_userAddress);
             if (result_3 > 0) {
-                newInfo.isThereAnyEther = true
-                newInfo.ether = result_3
+                newInfo.isThereAnyEther = true;
+                newInfo.ether = result_3;
+                newInfo.lastBlockGovTokenMinted = result_4;
             }
 
             this.info_user = newInfo;

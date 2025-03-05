@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { ethers } from 'ethers';
 import { Alerts_WalletInterface } from './Alerts/Alerts';
 import { AssetFactoryInterface } from './AssetFactoryInterface';
+import { TokenInterface } from './TokenInterface';
 import { AssetInterface } from './AssetInterface';
 import { ALLERT_ON_ERROR_UNEXPECTED } from '../utility/allerts';
 
@@ -23,6 +24,7 @@ interface WalletContextType {
     provider: ethers.BrowserProvider | null;
     isNetwork: boolean;
     assetFactoryInterface: React.MutableRefObject<AssetFactoryInterface | null>;
+    tokenInterface: React.MutableRefObject<TokenInterface | null>;
     assetInterface: React.MutableRefObject<AssetInterface | null>;
     reloadKey: number;
     connectWallet: () => Promise<void>;
@@ -40,6 +42,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isNetwork, setNetwork] = useState<boolean>(false);
 
     const assetFactoryInterface = useRef<AssetFactoryInterface | null>(null);
+    const tokenInterface = useRef<TokenInterface | null>(null);
     const assetInterface = useRef<AssetInterface | null>(null);
 
     const [reloadKey, setReloadKey] = useState(0);
@@ -99,6 +102,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setNetwork(isNetworkSet);
             if (newProvider !== null && userAddress !== null) {
                 assetFactoryInterface.current = new AssetFactoryInterface(newProvider, userAddress, reload);
+                tokenInterface.current = new TokenInterface(newProvider, userAddress, reload);
             }
         };
         initializeWalletConnection();
@@ -137,6 +141,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setUserAddress(ethers.getAddress(_selectedAddress));
             if (provider !== null) {
                 assetFactoryInterface.current = new AssetFactoryInterface(provider, _selectedAddress, reload);
+                tokenInterface.current = new TokenInterface(provider, _selectedAddress, reload);
             }
             listenToWalletEvents();
         } catch (error: any) {
@@ -277,6 +282,10 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 assetFactoryInterface.current.destroy();
                 assetFactoryInterface.current = null;
             }
+            if (tokenInterface.current !== null) {
+                tokenInterface.current.destroy();
+                tokenInterface.current = null;
+            }
             deleteAssetInterface();
         });
 
@@ -299,6 +308,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 provider,
                 isNetwork,
                 assetFactoryInterface,
+                tokenInterface,
                 assetInterface,
                 reloadKey,
                 connectWallet,

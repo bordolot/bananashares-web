@@ -17,6 +17,7 @@ export interface Info_Asset {
     shares: BigInt[];
     theRestShares: number;
     hash: string;
+    govTokensMinted: number;
 }
 
 export interface Info_License {
@@ -34,6 +35,7 @@ export interface Info_User {
     fees: bigint;
     isThereAnyEther: boolean;
     ether: bigint;
+    lastBlockGovTokenMinted: bigint;
 }
 
 export interface Info_UserOffer {

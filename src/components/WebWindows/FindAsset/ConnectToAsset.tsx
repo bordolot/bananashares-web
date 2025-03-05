@@ -45,8 +45,9 @@ const ConnectToAsset: React.FC<ConnectToAssetProps> = ({ moveToAsset }) => {
             const _infoTaken_4 = await assetInterface.current.getUserOffer(userAddress);
             const _infoTaken_5 = await assetInterface.current.getAllOffers();
 
+            const _infoTaken_6 = await assetFactoryInterface.current.checkProtocolDeploymentBlockNr();
 
-            if (!_infoTaken_1 && !_infoTaken_2 && !_infoTaken_3 && !_infoTaken_4 && !_infoTaken_5) {
+            if (!_infoTaken_1 && !_infoTaken_2 && !_infoTaken_3 && !_infoTaken_4 && !_infoTaken_5 && !_infoTaken_6) {
                 alert("There was a problem gathering Asset info."); return;
             }
             moveToAsset();

@@ -8,6 +8,7 @@ import { ModalBuySharesForm } from "../../../Modals/ModalBuyShares";
 
 import { useWallet } from "../../../../blockchain/WalletInterface";
 import { InAllOffer } from "./Offer";
+import { checkIfUserIsPrivileged, getNumberOfGovTokensToMintInAsset } from "../../../../blockchain/utilities/commonMethods";
 
 
 interface State {
@@ -38,7 +39,7 @@ function reducer(state: State, action: Action): State {
     }
 }
 export const Offers: React.FC = () => {
-    const { assetInterface } = useWallet();
+    const { assetInterface, assetFactoryInterface, tokenInterface } = useWallet();
 
     const [state, dispatch] = useReducer(reducer, initialState);
     const handleBuyShares = (offer: Info_RegularOffer) => () => {
@@ -100,11 +101,7 @@ export const Offers: React.FC = () => {
         } catch (error: any) {
             alert(error);
         }
-
-
-
     }
-
 
 
     if (!assetInterface.current) {
@@ -114,8 +111,18 @@ export const Offers: React.FC = () => {
         return (<>Asset info "info_allOffers" not read.</>)
     }
     if (!assetInterface.current.info_user) {
+        return (<>Asset info "info_user" not read.</>)
+    }
+    if (!assetInterface.current.info_asset) {
         return (<>Asset info "info_asset" not read.</>)
     }
+    if (!assetFactoryInterface.current) {
+        return (<>Asset info "assetFactoryInterface" not read.</>)
+    }
+    if (!tokenInterface.current) {
+        return (<>Asset info "tokenInterface" not read.</>)
+    }
+
 
     return (<>
         {/* <Offer /> */}
@@ -128,7 +135,18 @@ export const Offers: React.FC = () => {
                     <ModalBuySharesForm
                         numberOfShares={state.activeOffer.amount}
                         pricePerShare={state.activeOffer.valuePerShare}
-                        isUserPrivileged={assetInterface.current.isCurrentUserPrivileged} />
+                        isUserPrivileged={assetInterface.current.isCurrentUserPrivileged}
+                        isOferorPrivileged={
+                            checkIfUserIsPrivileged(
+                                state.activeOffer.addressFrom,
+                                assetInterface.current.info_asset)
+                        }
+                        numberOfGovTokensToMint={getNumberOfGovTokensToMintInAsset(
+                            Number(assetFactoryInterface.current.currentBlockNr),
+                            Number(assetFactoryInterface.current.protocolDeploymentBlockNr),
+                            Number(tokenInterface.current.availableToMint),
+                            Number(assetInterface.current.info_asset.govTokensMinted))}
+                    />
                 </Form>
             </ModalContent>
         )}

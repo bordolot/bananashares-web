@@ -15,6 +15,8 @@ export class AssetFactoryInterface extends ContractInterface {
     protected walletOwnerAddress: string | null;
     shouldShowAssetCreatedModal: boolean = false;
     newAssetAddress: string | undefined;
+    protocolDeploymentBlockNr: number = 0;
+    currentBlockNr: number = 0;
 
     constructor(_provider: ethers.BrowserProvider, _walletOwnerAddress: string | null, callTheOwner: () => void) {
         // Call the parent class constructor with arguments
@@ -25,6 +27,19 @@ export class AssetFactoryInterface extends ContractInterface {
             this._intializeAssetFactoryListeners(this.contract);
         }
         console.log("AssetFactoryInterface instance CREATED");
+    }
+
+    async checkProtocolDeploymentBlockNr(): Promise<{ infoTaken: boolean }> {
+        if (!this.contract) return { infoTaken: false }
+        try {
+            this.protocolDeploymentBlockNr = await this.contract.getProtocolDeploymentBlockNr();
+            this.currentBlockNr = await this.provider.getBlockNumber();
+            return { infoTaken: true }
+
+        } catch (error: any) {
+            console.warn("checkAssetExist error: ", error);
+            return { infoTaken: false }
+        }
     }
 
     //@TODO

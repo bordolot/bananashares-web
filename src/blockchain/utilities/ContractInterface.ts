@@ -4,6 +4,8 @@ import { ERROR_CODE_TX_REJECTED_BY_USER } from "../utilities/ErrorCodes";
 
 export class ContractInterface {
 
+    protected provider: ethers.BrowserProvider;
+
     protected contract: ethers.Contract | undefined;
     protected signer: ethers.Contract | undefined;
 
@@ -13,6 +15,7 @@ export class ContractInterface {
     constructor(_address: string, _abi: Interface | InterfaceAbi, _provider: ethers.BrowserProvider, callTheOwner: () => void) {
         this.contract = new ethers.Contract(_address, _abi, _provider);
         this.callTheOwner = callTheOwner;
+        this.provider = _provider;
         _provider.getSigner(0).then((_signer: ethers.JsonRpcSigner) => {
             this.signer = new ethers.Contract(_address, _abi, _signer)
         }).catch(error => {
