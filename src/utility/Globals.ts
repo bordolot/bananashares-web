@@ -21,3 +21,5 @@ export const SECOND_DIVISOR = 1000;
 //WebWindows
 export const SPINNER_DURATION = 200
 
+export const WAIT_BEFORE_UPDATE = 3000
+

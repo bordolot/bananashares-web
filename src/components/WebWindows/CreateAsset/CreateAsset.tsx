@@ -61,7 +61,7 @@ export const CreateAsset: React.FC<CreateAssetProps> = () => {
                         <>
                             <div>You succesfully tokenized your asset.</div>
                             <div>The address of your asset is: {newAssetCreatedAddress}</div>
-                            <div>This address has been saved to your computer.</div>
+                            {/* <div>This address has been saved to your computer.</div> */}
                             <div>Now you can sell shares in your asset.</div>
                             <div>To do so, open the 'Find Asset' window and paste the address of your asset.</div>
                             <div>Share your asset's address with others so anyone can buy your shares.</div>

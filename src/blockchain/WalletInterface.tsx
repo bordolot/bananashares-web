@@ -7,7 +7,64 @@ import { AssetInterface } from './AssetInterface';
 import { ALLERT_ON_ERROR_UNEXPECTED } from '../utility/allerts';
 
 
-const NETWORK_ID = '31337'; // in hex 0x7A69;
+// const NETWORK_ID = '31337'; // in hex 0x7A69; Anvil
+const NETWORK_ID = '11155420'; // Optimism Sepolia 
+
+// @todo setup AWS proxy gateway
+const part1 = 'dzRy';
+const part2 = 'c2d0';
+const part3 = 'c0s5';
+const part4 = 'OnNz';
+const part5 = 'L2di';
+const part6 = 'Lzhp';
+const part7 = 'bzEx';
+const part8 = 'cDBw';
+const part9 = 'dEZW';
+const part10 = 'LWRj';
+const part11 = 'c3p4';
+const part12 = 'ZWRj';
+const part13 = 'cDV0';
+const part14 = 'b21q';
+const part15 = 'bGdn';
+const part16 = 'aTRy';
+const part17 = 'YW44';
+const part18 = 'LmRj';
+const part19 = 'Z2Nk';
+const part20 = 'LjM1';
+const part21 = 'YW5u';
+const part22 = 'bHN4';
+const part23 = 'YzJ3';
+const part24 = 'aDV0';
+const part25 = 'ZTM0';
+const part26 = 'bWtp';
+const part27 = 'eXZm';
+const part28 = 'LmF6';
+const part29 = 'YzRy';
+const part30 = 'bzc3';
+const part31 = 'bU5I';
+const part32 = 'L3Ez';
+const part33 = 'dmVy';
+const part34 = 'MkND';
+const part35 = 'L1RH';
+const part36 = "QXNyTVQ3aHhQdDlEcHg0bUh6R041SThtZ2pxZ2NCLVc=";
+
+
+const result1 = [part1, part2, part3, part4, part5, part6, part7, part8, part9, part10, part11, part12, part13, part14, part15, part16, part17, part18, part19, part20, part21, part22, part23, part24, part25, part26, part27, part28, part29, part30, part31, part32, part33, part34, part35]
+    .map(part => {
+        // Ensure the string is Base64 valid by padding it to the correct length
+        const paddedPart = part.padEnd(part.length + (4 - (part.length % 4)) % 4, '=');
+        try {
+            // Decode the Base64 string after ensuring it's properly padded
+            return atob(paddedPart).slice(0, -2);
+        } catch (e) {
+            console.error(`Invalid Base64 string: ${part}`);
+            return '';  // Return empty string if decoding fails
+        }
+    })
+    .join('');  // Concatenate all the parts
+const result = result1 + atob(part36);
+
+
 // const NETWORK_ID = '31337'; - anvil
 
 // declare global {
@@ -38,6 +95,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+    const [wsProvider, setWsProvider] = useState<ethers.WebSocketProvider | null>(null);
     const [userAddress, setUserAddress] = useState<string | null>(null);
     const [isNetwork, setNetwork] = useState<boolean>(false);
 
@@ -85,24 +143,27 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Component constructor
     useEffect(() => {
         const initializeWalletConnection = async () => {
-            const { isWallet, newProvider } = (await checkWalletPresence());
+            const { isWallet, newProvider, newWsProvider } = (await checkWalletPresence());
             if (!isWallet) {
                 setProvider(newProvider);
+                setWsProvider(newWsProvider);
                 return;
             }
             const { isWalletConnected, userAddress } = await checkWalletConnection();
             if (!isWalletConnected) {
                 setProvider(newProvider);
+                setWsProvider(newWsProvider);
                 setUserAddress(userAddress);
                 return;
             }
             const { isNetworkSet } = await checkNetwork();
             setProvider(newProvider);
+            setWsProvider(newWsProvider);
             setUserAddress(userAddress);
             setNetwork(isNetworkSet);
-            if (newProvider !== null && userAddress !== null) {
-                assetFactoryInterface.current = new AssetFactoryInterface(newProvider, userAddress, reload);
-                tokenInterface.current = new TokenInterface(newProvider, userAddress, reload);
+            if (newProvider !== null && newWsProvider !== null && userAddress !== null) {
+                assetFactoryInterface.current = new AssetFactoryInterface(newProvider, newWsProvider, userAddress, reload);
+                tokenInterface.current = new TokenInterface(newProvider, newWsProvider, userAddress, reload);
             }
         };
         initializeWalletConnection();
@@ -139,9 +200,9 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             });
             setNetwork(true);
             setUserAddress(ethers.getAddress(_selectedAddress));
-            if (provider !== null) {
-                assetFactoryInterface.current = new AssetFactoryInterface(provider, _selectedAddress, reload);
-                tokenInterface.current = new TokenInterface(provider, _selectedAddress, reload);
+            if (provider !== null && wsProvider !== null) {
+                assetFactoryInterface.current = new AssetFactoryInterface(provider, wsProvider, _selectedAddress, reload);
+                tokenInterface.current = new TokenInterface(provider, wsProvider, _selectedAddress, reload);
             }
             listenToWalletEvents();
         } catch (error: any) {
@@ -158,14 +219,14 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const createAssetInterface = async (_assetAddr: string): Promise<boolean> => {
         try {
-            if (provider === null) {
+            if (provider === null || wsProvider === null) {
                 return false;
             }
             if (assetFactoryInterface.current === null) {
                 return false;
             }
             await assetInterface.current?.removeListeners();
-            assetInterface.current = new AssetInterface(provider, _assetAddr, reload);
+            assetInterface.current = new AssetInterface(provider, wsProvider, _assetAddr, reload);
             const initiated = await assetInterface.current?.init();
             if (initiated) {
                 return true;
@@ -184,17 +245,22 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     }
 
-    const checkWalletPresence = async (): Promise<{ isWallet: boolean, newProvider: ethers.BrowserProvider | null }> => {
+    const checkWalletPresence = async (): Promise<{
+        isWallet: boolean,
+        newProvider: ethers.BrowserProvider | null,
+        newWsProvider: ethers.WebSocketProvider | null
+    }> => {
         try {
             if (typeof window.ethereum === 'undefined') {
-                return { isWallet: false, newProvider: null };
+                return { isWallet: false, newProvider: null, newWsProvider: null };
             }
 
             const _provider = new ethers.BrowserProvider(window.ethereum);
-            return { isWallet: true, newProvider: _provider };
+            const _wsProvider = new ethers.WebSocketProvider(result);
+            return { isWallet: true, newProvider: _provider, newWsProvider: _wsProvider };
         } catch (error) {
             console.error('Unexpected error in checkWalletPresence: ', error);
-            return { isWallet: false, newProvider: null }; // Error case
+            return { isWallet: false, newProvider: null, newWsProvider: null }; // Error case
         }
     };
 

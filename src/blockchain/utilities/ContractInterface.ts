@@ -4,18 +4,27 @@ import { ERROR_CODE_TX_REJECTED_BY_USER } from "../utilities/ErrorCodes";
 
 export class ContractInterface {
 
+    protected providerForEvents: ethers.WebSocketProvider;
     protected provider: ethers.BrowserProvider;
 
+    protected contractForEvents: ethers.Contract | undefined;
     protected contract: ethers.Contract | undefined;
     protected signer: ethers.Contract | undefined;
 
     protected transactionError: string | undefined;
     protected txBeingSent: string | undefined;
 
-    constructor(_address: string, _abi: Interface | InterfaceAbi, _provider: ethers.BrowserProvider, callTheOwner: () => void) {
+    constructor(
+        _address: string,
+        _abi: Interface | InterfaceAbi,
+        _provider: ethers.BrowserProvider,
+        _providerForEvents: ethers.WebSocketProvider,
+        callTheOwner: () => void) {
         this.contract = new ethers.Contract(_address, _abi, _provider);
+        this.contractForEvents = new ethers.Contract(_address, _abi, _providerForEvents);
         this.callTheOwner = callTheOwner;
         this.provider = _provider;
+        this.providerForEvents = _providerForEvents;
         _provider.getSigner(0).then((_signer: ethers.JsonRpcSigner) => {
             this.signer = new ethers.Contract(_address, _abi, _signer)
         }).catch(error => {

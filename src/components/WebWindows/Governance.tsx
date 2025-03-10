@@ -15,14 +15,15 @@ const Governance: React.FC<GovernanceProps> = () => (
 
         <StandardInsideBG>
             <div className="text-2xl">
-                Bananashares token is the official ERC-20 governance token of the Bananashares Protocol, empowering the community to participate in key decisions. It is deployed on the Optimism mainnet at [0x...]. Holders can vote on proposals and shape the future of the protocol.
+                Bananashares token is the official ERC-20 governance token of the Bananashares Protocol, empowering the community to participate in key decisions. Holders can vote on proposals and shape the future of the protocol.
             </div>
+            {/* It is deployed on the Optimism mainnet at [0x...]. */}
         </StandardInsideBG>
 
 
         <StandardInsideBG>
             <div className="text-2xl">
-                The protocol is currently in phase {getCurrentPhase()}. This means Bananashares tokens are officially launched but not yet available for purchase.
+                The protocol is currently in phase {getCurrentPhase()}. This means the Bananashares token has NOT YET been officially launched on the Mainnet. However, you can test it on Optimism Sepolia.
             </div>
         </StandardInsideBG>
 

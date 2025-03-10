@@ -12,13 +12,17 @@ export class TokenInterface extends ContractInterface {
 
     availableToMint: number = 0;
 
-    constructor(_provider: ethers.BrowserProvider, _walletOwnerAddress: string | null, callTheOwner: () => void) {
+    constructor(
+        _provider: ethers.BrowserProvider,
+        _providerForEvents: ethers.WebSocketProvider,
+        _walletOwnerAddress: string | null,
+        callTheOwner: () => void) {
         // Call the parent class constructor with arguments
-        super(addresses.BananaSharesToken, tokenAbi.abi, _provider, callTheOwner);
+        super(addresses.BananaSharesToken, tokenAbi.abi, _provider, _providerForEvents, callTheOwner);
         this.walletOwnerAddress = _walletOwnerAddress;
         this.checkAvailableToMint();
-        if (this.contract !== undefined) {
-            this._intializeAssetListeners(this.contract);
+        if (this.contractForEvents !== undefined) {
+            this._intializeAssetListeners(this.contractForEvents);
         }
         console.log("TokenInterface instance CREATED");
     }
@@ -35,6 +39,7 @@ export class TokenInterface extends ContractInterface {
     }
 
     private async _intializeAssetListeners(_contract: ethers.Contract) {
+        _contract.removeAllListeners();
         _contract.on("TokenMinted", async () => {
             await this.checkAvailableToMint();
         })

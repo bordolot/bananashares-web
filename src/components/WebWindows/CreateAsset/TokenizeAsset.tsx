@@ -200,9 +200,9 @@ export function TokenizeAsset() {
         <div className="m-10">
             {
                 assetFactoryInterface.current !== null && assetFactoryInterface.current.newAssetAddress !== undefined ?
-                    <>
+                    <div className="mb-10 font-bold">
                         Your last created asset's address: {assetFactoryInterface.current.newAssetAddress}
-                    </>
+                    </div>
                     :
                     <></>
             }

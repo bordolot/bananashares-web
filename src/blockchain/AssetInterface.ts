@@ -7,7 +7,7 @@ import { TxArgs_BuyShares, TxArgs_CancelOffer, TxArgs_ChangeOffer, TxArgs_MakeSe
 import { TxArgs_PutNewLicense, TxArgs_ActivateLicense, TxArgs_SignLicense, TxArgs_PayDividend } from "../utility/Interfaces";
 import { Info_Asset, Info_License, Info_RegularOffer, Info_User, Info_UserOffer } from "../utility/Interfaces";
 
-import { GAS_LIMIT_IN_PAY_DIVIDEND_BASE, GAS_LIMIT_IN_PAY_DIVIDEND_PER_ITERATION, TOTAL_SUPLY } from "../utility/Globals";
+import { GAS_LIMIT_IN_PAY_DIVIDEND_BASE, GAS_LIMIT_IN_PAY_DIVIDEND_PER_ITERATION, TOTAL_SUPLY, WAIT_BEFORE_UPDATE } from "../utility/Globals";
 import { checkIfUserIsPrivileged, sortOffersByValuePerShare } from "./utilities/commonMethods";
 
 export class AssetInterface extends ContractInterface {
@@ -28,15 +28,20 @@ export class AssetInterface extends ContractInterface {
     private wasCalledDuringExecution_updateOffers: boolean = false;
     private debounceTimeout_updateOffers: NodeJS.Timeout | null = null;
 
-    constructor(_provider: ethers.BrowserProvider, _assetAddr: string, callTheOwner: () => void) {
+
+    constructor(
+        _provider: ethers.BrowserProvider,
+        _providerForEvents: ethers.WebSocketProvider,
+        _assetAddr: string,
+        callTheOwner: () => void) {
         // Call the parent class constructor with arguments
-        super(_assetAddr, assetAbi.abi, _provider, callTheOwner);
+        super(_assetAddr, assetAbi.abi, _provider, _providerForEvents, callTheOwner);
     }
 
     async init(): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
-            if (this.contract !== undefined) {
-                await this._intializeAssetListeners(this.contract);
+            if (this.contractForEvents !== undefined) {
+                await this._intializeAssetListeners(this.contractForEvents);
             } else {
                 reject(false)
             }
@@ -400,7 +405,7 @@ export class AssetInterface extends ContractInterface {
     //
 
     async removeListeners() {
-        await this.contract?.removeAllListeners()
+        await this.contractForEvents?.removeAllListeners()
     }
 
     private _updateOffers = async () => {
@@ -409,6 +414,7 @@ export class AssetInterface extends ContractInterface {
             return;
         }
         this.isDuringExecution_updateOffers = true;
+        await new Promise(resolve => setTimeout(resolve, WAIT_BEFORE_UPDATE));
         try {
 
             await this.getAssetInfo();
@@ -438,6 +444,7 @@ export class AssetInterface extends ContractInterface {
             return;
         }
         this.isDuringExecution_updateLicenses = true;
+        await new Promise(resolve => setTimeout(resolve, WAIT_BEFORE_UPDATE));
         try {
             await this.getLicensesInfo();
             this.callTheOwner();
@@ -454,6 +461,7 @@ export class AssetInterface extends ContractInterface {
             this.isDuringExecution_updateLicenses = false;
         }
     }
+
 
     private async _intializeAssetListeners(_contract: ethers.Contract) {
         _contract.on("SellOfferPut", async (from, amount, value,) => {
@@ -480,6 +488,7 @@ export class AssetInterface extends ContractInterface {
             //@TODO add any info or allert with this info for users
             console.log(`OfferChanged!!!!`);
             console.log(` from => ${from}  value => ${value} `);
+
             await this._updateOffers();
         })
 
@@ -549,6 +558,7 @@ export class AssetInterface extends ContractInterface {
             console.log(`GasUsage => ${gas} `);
             await this._updateOffers();
         })
+
     }
 
 }

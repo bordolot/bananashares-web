@@ -18,13 +18,17 @@ export class AssetFactoryInterface extends ContractInterface {
     protocolDeploymentBlockNr: number = 0;
     currentBlockNr: number = 0;
 
-    constructor(_provider: ethers.BrowserProvider, _walletOwnerAddress: string | null, callTheOwner: () => void) {
+    constructor(
+        _provider: ethers.BrowserProvider,
+        _providerForEvents: ethers.WebSocketProvider,
+        _walletOwnerAddress: string | null,
+        callTheOwner: () => void) {
         // Call the parent class constructor with arguments
-        super(addresses.AssetFactory, createAssetAbi.abi, _provider, callTheOwner);
+        super(addresses.AssetFactory, createAssetAbi.abi, _provider, _providerForEvents, callTheOwner);
         this.walletOwnerAddress = _walletOwnerAddress;
 
-        if (this.contract !== undefined) {
-            this._intializeAssetFactoryListeners(this.contract);
+        if (this.contractForEvents !== undefined) {
+            this._intializeAssetFactoryListeners(this.contractForEvents);
         }
         console.log("AssetFactoryInterface instance CREATED");
     }
@@ -77,7 +81,7 @@ export class AssetFactoryInterface extends ContractInterface {
             if (this.signer == undefined) {
                 throw new Error("Wrong Signer")
             }
-            const tx = await this.signer.createSong(
+            const tx = await this.signer.createAssetInstance(
                 args.title,
                 args.names,
                 args.addresses,
@@ -92,7 +96,7 @@ export class AssetFactoryInterface extends ContractInterface {
     }
 
     private _intializeAssetFactoryListeners(_contract: ethers.Contract) {
-
+        _contract.removeAllListeners();
 
         _contract.on("AssetInstanceCreated", (assetCreator, assetAddress, nameOfAsset, event) => {
 
@@ -106,7 +110,7 @@ export class AssetFactoryInterface extends ContractInterface {
                 if (this.walletOwnerAddress.toLowerCase() == assetCreator.toLowerCase()) {
 
 
-                    const content = `Song address: ${assetAddress}`
+                    const content = `Asset address: ${assetAddress}`
                     saveToFile(`${nameOfAsset}_address.txt`, content)
 
 

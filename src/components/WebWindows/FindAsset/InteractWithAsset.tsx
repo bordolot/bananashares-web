@@ -17,7 +17,6 @@ const InteractWithAsset: React.FC<InteractWithAssetProps> = ({ back }) => {
     const { reloadKey, assetInterface } = useWallet();
 
     useEffect(() => {
-
     }, [reloadKey]);
 
 
