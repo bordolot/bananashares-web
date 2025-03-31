@@ -10,6 +10,19 @@ import { ALLERT_ON_ERROR_UNEXPECTED } from '../utility/allerts';
 // const NETWORK_ID = '31337'; // in hex 0x7A69; Anvil
 const NETWORK_ID = '11155420'; // Optimism Sepolia 
 
+const CHAIN_DATA = {
+    chainId: "0xaa37dc", // 0xaa37dc in hex is 11155420 in decimal
+    chainName: "Optimism Sepolia",
+    rpcUrls: ["https://sepolia.optimism.io"],
+    nativeCurrency: {
+        name: "Ethereum",
+        symbol: "ETH",
+        decimals: 18,
+    },
+    blockExplorerUrls: ["https://sepolia-optimistic.etherscan.io"],
+};
+
+
 // @todo setup AWS proxy gateway
 const part1 = 'dzRy';
 const part2 = 'c2d0';
@@ -309,10 +322,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (requiredChainIdHex === currentNetwork) {
                 return { isNetworkSet: true };
             }
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: requiredChainIdHex }],
-            });
+
+            const { isNewNetworkSwitched, isNewNetworkAdded } = (await addOrSwitchChain());
+            if (!isNewNetworkAdded || !isNewNetworkSwitched ){
+                return { isNetworkSet: false };
+            }
+
             currentNetwork = await window.ethereum.request({
                 method: "eth_chainId",
                 params: [],
@@ -322,6 +337,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
             return { isNetworkSet: false };
         } catch (error: any) {
+            
             if (error.code === 4001) {
                 console.warn('User rejected the chain switch request.');
             } else if (error.code === 4902) {
@@ -331,6 +347,35 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
             // throw error;
             return { isNetworkSet: false };
+        }
+    }
+
+
+    const addOrSwitchChain = async (): Promise<{isNewNetworkSwitched: boolean , isNewNetworkAdded: boolean }> => {
+        const requiredChainIdHex = `0x${parseInt(NETWORK_ID).toString(16)}`;
+        try {
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: requiredChainIdHex }],
+            });
+            return { isNewNetworkSwitched:true, isNewNetworkAdded: false };
+        } catch (error: any) {
+            
+            if (error.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [CHAIN_DATA],
+                    });
+                    return { isNewNetworkSwitched:false,isNewNetworkAdded: true };
+                } catch (addError) {
+                    console.error("Failed to add the network", addError);
+                }
+            } else {
+                console.error('Unexpected error in changeNetwork: ', error);
+            }
+            // throw error;
+            return { isNewNetworkSwitched:false,isNewNetworkAdded: false };
         }
     }
 
